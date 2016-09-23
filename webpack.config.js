@@ -17,7 +17,16 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: './src/index.html',
             filename: 'index.html',
-            showErors:true
+            showErors: true
         }),
-    ]
+    ],
+
+    devServer: {
+        port: 8080,
+        host: '0.0.0.0',
+        progress: true,
+        contentBase: './build',
+        publicPath: '/',
+        stats: { colors: true }
+    }
 };

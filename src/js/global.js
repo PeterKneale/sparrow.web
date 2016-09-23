@@ -1,1 +1,1 @@
-document.write("GlobalJs: loaded")
+alert("GlobalJs: loaded")

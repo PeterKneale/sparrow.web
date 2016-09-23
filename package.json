@@ -7,7 +7,6 @@
     "webpack": "^1.13.2"
   },
   "devDependencies": {
-    "babel": "^6.5.2",
     "babel-cli": "^6.14.0",
     "babel-core": "^6.14.0",
     "babel-preset-es2015": "^6.14.0",
@@ -21,11 +20,11 @@
     "webpack-load-plugins": "^0.1.2"
   },
   "scripts": {
+    "clean": "rimraf ./build",
     "host": "webpack-dev-server --progress --colors",
-    "build": "run-s -s webpack package",
     "webpack": "webpack --progress --colors",
-    "package": "babel-node scripts/package.js",
-    "clean": "rimraf ./build"
+    "build": "run-s -s webpack package",
+    "package": "babel-node scripts/package.js"
   },
   "repository": {
     "type": "git",

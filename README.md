@@ -1,5 +1,6 @@
 # Before
 Install node
+Install npm
 
 # Git
 eval `ssh-agent -s`
