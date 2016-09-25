@@ -5,7 +5,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Nav, NavItem } from 'react-bootstrap';
 
 const People = function (props) {
-    return <Nav bsStyle="pills">
+    return <Nav bsStyle="tabs">
         <LinkContainer to="/people/clients">
             <NavItem>Clients</NavItem>
         </LinkContainer>
