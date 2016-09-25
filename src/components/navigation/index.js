@@ -5,7 +5,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 
 const Navigation = function (props) {
-    return <Navbar>
+    return <Navbar inverse>
         <div className="container-fluid">
             <Navbar.Header>
                 <Navbar.Brand>

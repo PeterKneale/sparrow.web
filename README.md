@@ -19,3 +19,10 @@ npm version minor
 git add .
 git commit -a -m "I developed this"
 git push origin master --tags
+
+
+
+
+#notes:
+This might be better
+http://allenfang.github.io/react-bootstrap-table
