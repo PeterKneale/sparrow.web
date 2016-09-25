@@ -15,4 +15,4 @@ Jumbo.propTypes = {
     body: PropTypes.string
 }
 
-export default Jumbo
+module.exports = Jumbo;
