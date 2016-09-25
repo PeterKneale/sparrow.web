@@ -1,12 +1,19 @@
 import React from 'react'
 import Header from '../../components/header';
+import Navigation from '../../components/navigation/people';
 
-const Invoices = () => {
+const People = (props) => {
     return (
         <div>
-            <Header heading="People" subheading="Your people."/>
+            <Navigation/>
+            {props.children}
         </div>
     )
 }
 
-export default Invoices
+People.propTypes = {
+
+};
+
+export default People
+

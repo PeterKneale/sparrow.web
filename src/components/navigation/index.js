@@ -15,22 +15,22 @@ const Navigation = function (props) {
             </Navbar.Header>
             <Navbar.Collapse>
                 <Nav>
-                    <LinkContainer to="/people" activeClassName="active">
+                    <LinkContainer to="/people">
                         <NavItem>People</NavItem>
                     </LinkContainer>
-                    <LinkContainer to="/invoices"  activeClassName="active">
+                    <LinkContainer to="/invoices" >
                         <NavItem>Invoices</NavItem>
                     </LinkContainer>
-                    <LinkContainer to="/estimates" activeClassName="active">
+                    <LinkContainer to="/estimates">
                         <NavItem>Estimates</NavItem>
                     </LinkContainer>
-                    <LinkContainer to="/expenses" activeClassName="active">
+                    <LinkContainer to="/expenses">
                         <NavItem>Expenses</NavItem>
                     </LinkContainer>
-                    <LinkContainer to="/timesheets" activeClassName="active">
+                    <LinkContainer to="/timesheets">
                         <NavItem>Timesheets</NavItem>
                     </LinkContainer>
-                    <LinkContainer to="/reporting" activeClassName="active">
+                    <LinkContainer to="/reporting">
                         <NavItem>Reporting</NavItem>
                     </LinkContainer>
                 </Nav>
@@ -45,12 +45,10 @@ const Navigation = function (props) {
                 </Nav>
             </Navbar.Collapse>
         </div>
-    </Navbar >
-
+    </Navbar>
 };
 
 Navigation.propTypes = {
-    current: PropTypes.string,
     username: PropTypes.string
 };
 
