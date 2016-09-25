@@ -1,15 +1,29 @@
 import React, {Component} from 'react'
-import { Layout } from 'react-toolbox';
-import Navigation from '../navigation';
+import Navigation from '../components/navigation';
+import Header from '../components/header';
+import Jumbo from '../components/jumbo';
+import { Grid, Row, Col  } from 'react-bootstrap';
+import './app.css'
 
 class App extends React.Component {
     render() {
         return (
-            <Layout>
-                <Navigation current="home" />
-            </Layout>
+
+            <div className="container">
+                <Navigation app="sparrow" current="home" username="peter kneale" />
+                <Jumbo heading="Welcome to sparrow" body="The easiest thing on the planet"/>
+                <Grid>
+                    <Row>
+                        <Col>
+                            <Header heading="Sparrow" subheading="Light, fast and friendly"/>
+                        </Col>
+                    </Row>
+                </Grid>
+            </div>
+
         )
     }
 }
 
 export default App
+
