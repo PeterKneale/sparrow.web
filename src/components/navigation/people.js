@@ -7,13 +7,13 @@ import { Nav, NavItem } from 'react-bootstrap';
 const People = function (props) {
     return <Nav bsStyle="tabs">
         <LinkContainer to="/people/clients">
-            <NavItem>Clients</NavItem>
+            <NavItem>Client Management</NavItem>
         </LinkContainer>
         <LinkContainer to="/people/staff">
-            <NavItem>Staff</NavItem>
+            <NavItem>Staff Management</NavItem>
         </LinkContainer>
         <LinkContainer to="/people/contractors">
-            <NavItem>Contractors</NavItem>
+            <NavItem>Contractor Management</NavItem>
         </LinkContainer>
     </Nav>
 };

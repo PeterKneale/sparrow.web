@@ -1,40 +1,52 @@
-import React, {PropTypes} from 'react';
-import Header from '../../../components/header';
-import CreateForm from './createform';
-import CreateButton from './createbutton';
-import List from './list';
-import { setVisibility } from "./actions"
+import React, {PropTypes} from 'react'
 import { connect } from 'react-redux'
+import { Checkbox, ButtonToolbar, ButtonGroup, Button, Glyphicon } from 'react-bootstrap';
+import { setVisibility, CREATE_COMPONENT, LIST_COMPONENT, TOOLBOX_COMPONENT } from "./actions"
+import Header from '../../../components/header';
+import Create from './create';
+import List from './list';
+import Toolbox from './toolbox';
 
-const Clients = ({onCreate, onSave, onCancel, onSaveClick}) => {
+const Clients = ({onCreate, onSave, onCancel}) => {
     return (
         <div>
-            <CreateButton onCreateClick={()=>onCreate()} />
-            <Header heading="Clients" subheading="Manage your clients and create new ones." />
-            <CreateForm onSaveClick={()=>onSave()} onCancelClick={()=>onCancel()} />
-            <List/>
+            <Button bsStyle="primary" bsSize="large" className="pull-right" onClick={() => onCreate() }><Glyphicon glyph="plus" /> Create Client</Button>
+            <Header heading="Clients" subheading="Add new clients and manage existing ones..." />
+            <Create onSave={() => onSave() } onCancel={() => onCancel() } />
+            <List />
         </div>
     )
 }
 
 Clients.propTypes = {
-    visible: PropTypes.bool,
     onCreate: PropTypes.func,
     onSave: PropTypes.func,
-    onCancel: PropTypes.func,
-};
-
-const mapStateToProps = (state) => {
-  return {} // TODO: Figure out why this cant be removed
+    onCancel: PropTypes.func
 }
 
-const mapDispatchToProps = (dispatch)=> ({
-    onCreate: () => { dispatch(setVisibility(true)) },
-    onSave: () => { dispatch(setVisibility(false)) },
-    onCancel: () => { dispatch(setVisibility(false)) }
+const mapStateToProps = (state) => {
+    return {} // TODO: Figure out why this cant be removed
+}
+
+const mapDispatchToProps = (dispatch) => ({
+    onCreate: () => {
+        dispatch(setVisibility(CREATE_COMPONENT, true))
+        dispatch(setVisibility(LIST_COMPONENT, false))
+        dispatch(setVisibility(TOOLBOX_COMPONENT, false))
+    },
+    onSave: () => {
+        dispatch(setVisibility(CREATE_COMPONENT,false))
+        dispatch(setVisibility(LIST_COMPONENT, true))
+        dispatch(setVisibility(TOOLBOX_COMPONENT, true))
+    },
+    onCancel: () => {
+        dispatch(setVisibility(CREATE_COMPONENT,false))
+        dispatch(setVisibility(LIST_COMPONENT, true))
+        dispatch(setVisibility(TOOLBOX_COMPONENT, true))
+    }
 });
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+    mapStateToProps,
+    mapDispatchToProps
 )(Clients)

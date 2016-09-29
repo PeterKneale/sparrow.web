@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux'
-import peopleReducer from './modules/people/client/reducer'
+import { clientReducer } from './modules/people/client/actions'
 
 const rootReducer = combineReducers({
-  people: peopleReducer
+  client: clientReducer
 });
 
 export default rootReducer

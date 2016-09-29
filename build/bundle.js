@@ -67,9 +67,11 @@
 
 	var _store = __webpack_require__(257);
 
-	var _globals = __webpack_require__(270);
+	var _globals = __webpack_require__(269);
 
 	var _globals2 = _interopRequireDefault(_globals);
+
+	__webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"bootstrap/less/bootstrap.less\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	__webpack_require__(271);
 
@@ -28669,23 +28671,24 @@
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
-	var _reduxThunk = __webpack_require__(261);
+	var _reduxThunk = __webpack_require__(260);
 
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
-	var _reduxPromise = __webpack_require__(262);
+	var _reduxPromise = __webpack_require__(261);
 
 	var _reduxPromise2 = _interopRequireDefault(_reduxPromise);
 
-	var _reduxLogger = __webpack_require__(269);
+	var _reduxLogger = __webpack_require__(268);
 
 	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var logger = (0, _reduxLogger2.default)();
+	var initialState = {};
 
-	var store = exports.store = (0, _redux.createStore)(_reducers2.default, (0, _redux.applyMiddleware)(_reduxThunk2.default, _reduxPromise2.default, logger));
+	var store = exports.store = (0, _redux.createStore)(_reducers2.default, initialState, (0, _redux.applyMiddleware)(_reduxThunk2.default, _reduxPromise2.default, logger));
 
 /***/ },
 /* 258 */
@@ -28699,70 +28702,77 @@
 
 	var _redux = __webpack_require__(243);
 
-	var _reducer = __webpack_require__(259);
-
-	var _reducer2 = _interopRequireDefault(_reducer);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _actions = __webpack_require__(259);
 
 	var rootReducer = (0, _redux.combineReducers)({
-	  peopleReducer: _reducer2.default
+	  client: _actions.clientReducer
 	});
 
 	exports.default = rootReducer;
 
 /***/ },
 /* 259 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
-	exports.default = clientReducer;
+	exports.clientReducer = clientReducer;
+	// action types
+	var SET_VISIBILITY = exports.SET_VISIBILITY = 'SET_VISIBILITY';
+	var CREATE_COMPONENT = exports.CREATE_COMPONENT = "CREATE_COMPONENT";
+	var LIST_COMPONENT = exports.LIST_COMPONENT = "LIST_COMPONENT";
+	var TOOLBOX_COMPONENT = exports.TOOLBOX_COMPONENT = "TOOLBOX_COMPONENT";
 
-	var _actions = __webpack_require__(260);
-
-	var initialState = {
-	  visible: true
+	// Action Methods
+	var setVisibility = exports.setVisibility = function setVisibility(item, visible) {
+	    return {
+	        type: SET_VISIBILITY,
+	        item: item,
+	        visible: visible
+	    };
 	};
 
-	function clientReducer() {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
-	  var action = arguments[1];
+	var initialState = {
+	    create_visible: false,
+	    list_visible: true,
+	    toolbox_visible: true
+	};
 
-	  switch (action.type) {
-	    case _actions.SET_VISIBILITY:
-	      return Object.assign({}, state, {
-	        visible: action.visible
-	      });
-	    default:
-	      return state;
-	  }
+	// reducer
+	function clientReducer() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case SET_VISIBILITY:
+	            {
+	                switch (action.item) {
+	                    case CREATE_COMPONENT:
+	                        return Object.assign({}, state, {
+	                            create_visible: action.visible
+	                        });
+	                    case LIST_COMPONENT:
+	                        return Object.assign({}, state, {
+	                            list_visible: action.visible
+	                        });
+	                    case TOOLBOX_COMPONENT:
+	                        return Object.assign({}, state, {
+	                            toolbox_visible: action.visible
+	                        });
+	                    default:
+	                        return state;
+	                }
+	            }
+	        default:
+	            return state;
+	    }
 	}
 
 /***/ },
 /* 260 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	   value: true
-	});
-	// action types
-	var SET_VISIBILITY = exports.SET_VISIBILITY = 'SET_VISIBILITY';
-
-	var setVisibility = exports.setVisibility = function setVisibility(visible) {
-	   return {
-	      type: SET_VISIBILITY,
-	      visible: visible
-	   };
-	};
-
-/***/ },
-/* 261 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -28790,7 +28800,7 @@
 	exports['default'] = thunk;
 
 /***/ },
-/* 262 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28801,7 +28811,7 @@
 
 	exports['default'] = promiseMiddleware;
 
-	var _fluxStandardAction = __webpack_require__(263);
+	var _fluxStandardAction = __webpack_require__(262);
 
 	function isPromise(val) {
 	  return val && typeof val.then === 'function';
@@ -28828,7 +28838,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 263 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28839,7 +28849,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _lodashIsplainobject = __webpack_require__(264);
+	var _lodashIsplainobject = __webpack_require__(263);
 
 	var _lodashIsplainobject2 = _interopRequireDefault(_lodashIsplainobject);
 
@@ -28858,7 +28868,7 @@
 	}
 
 /***/ },
-/* 264 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -28869,9 +28879,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseFor = __webpack_require__(265),
-	    isArguments = __webpack_require__(266),
-	    keysIn = __webpack_require__(267);
+	var baseFor = __webpack_require__(264),
+	    isArguments = __webpack_require__(265),
+	    keysIn = __webpack_require__(266);
 
 	/** `Object#toString` result references. */
 	var objectTag = '[object Object]';
@@ -28967,7 +28977,7 @@
 
 
 /***/ },
-/* 265 */
+/* 264 */
 /***/ function(module, exports) {
 
 	/**
@@ -29021,7 +29031,7 @@
 
 
 /***/ },
-/* 266 */
+/* 265 */
 /***/ function(module, exports) {
 
 	/**
@@ -29256,7 +29266,7 @@
 
 
 /***/ },
-/* 267 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -29267,8 +29277,8 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var isArguments = __webpack_require__(266),
-	    isArray = __webpack_require__(268);
+	var isArguments = __webpack_require__(265),
+	    isArray = __webpack_require__(267);
 
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -29394,7 +29404,7 @@
 
 
 /***/ },
-/* 268 */
+/* 267 */
 /***/ function(module, exports) {
 
 	/**
@@ -29580,7 +29590,7 @@
 
 
 /***/ },
-/* 269 */
+/* 268 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -29813,7 +29823,7 @@
 	module.exports = createLogger;
 
 /***/ },
-/* 270 */
+/* 269 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -29824,6 +29834,7 @@
 	exports.default = document;
 
 /***/ },
+/* 270 */,
 /* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -49664,7 +49675,7 @@
 	var People = function People(props) {
 	    return _react2.default.createElement(
 	        _reactBootstrap.Nav,
-	        { bsStyle: 'pills' },
+	        { bsStyle: 'tabs' },
 	        _react2.default.createElement(
 	            _reactRouterBootstrap.LinkContainer,
 	            { to: '/people/clients' },
@@ -49711,72 +49722,81 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRedux = __webpack_require__(236);
+
+	var _reactBootstrap = __webpack_require__(289);
+
+	var _actions = __webpack_require__(259);
+
 	var _header = __webpack_require__(543);
 
 	var _header2 = _interopRequireDefault(_header);
 
-	var _createform = __webpack_require__(549);
+	var _create = __webpack_require__(549);
 
-	var _createform2 = _interopRequireDefault(_createform);
+	var _create2 = _interopRequireDefault(_create);
 
-	var _createbutton = __webpack_require__(550);
-
-	var _createbutton2 = _interopRequireDefault(_createbutton);
-
-	var _list = __webpack_require__(551);
+	var _list = __webpack_require__(550);
 
 	var _list2 = _interopRequireDefault(_list);
 
-	var _actions = __webpack_require__(260);
+	var _toolbox = __webpack_require__(551);
 
-	var _reactRedux = __webpack_require__(236);
+	var _toolbox2 = _interopRequireDefault(_toolbox);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Clients = function Clients(_ref) {
 	    var onCreate = _ref.onCreate;
-	    var _onCancelled = _ref.onCancelled;
-	    var _onSaved = _ref.onSaved;
+	    var _onSave = _ref.onSave;
+	    var _onCancel = _ref.onCancel;
 
 	    return _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(_createbutton2.default, { onClick: function onClick() {
-	                return onCreate();
-	            } }),
-	        _react2.default.createElement(_header2.default, { heading: 'Clients', subheading: 'Manage your clients and create new ones.' }),
-	        _react2.default.createElement(_createform2.default, { onCancelled: function onCancelled() {
-	                return _onCancelled();
-	            }, onSaved: function onSaved() {
-	                return _onSaved();
+	        _react2.default.createElement(
+	            _reactBootstrap.Button,
+	            { bsStyle: 'primary', bsSize: 'large', className: 'pull-right', onClick: function onClick() {
+	                    return onCreate();
+	                } },
+	            'Create Client'
+	        ),
+	        _react2.default.createElement(_header2.default, { heading: 'Clients', subheading: 'Add new clients and manage existing ones...' }),
+	        _react2.default.createElement(_create2.default, { onSave: function onSave() {
+	                return _onSave();
+	            }, onCancel: function onCancel() {
+	                return _onCancel();
 	            } }),
 	        _react2.default.createElement(_list2.default, null)
 	    );
 	};
 
 	Clients.propTypes = {
-	    visible: _react.PropTypes.bool,
 	    onCreate: _react.PropTypes.func,
-	    onCancelled: _react.PropTypes.func,
-	    onSaved: _react.PropTypes.func
+	    onSave: _react.PropTypes.func,
+	    onCancel: _react.PropTypes.func
 	};
 
 	var mapStateToProps = function mapStateToProps(state) {
-	    return {
-	        visible: state.visible
-	    };
+	    return {}; // TODO: Figure out why this cant be removed
 	};
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	    return {
 	        onCreate: function onCreate() {
-	            dispatch((0, _actions.setVisibility)(true));
+	            dispatch((0, _actions.setVisibility)(_actions.CREATE_COMPONENT, true));
+	            dispatch((0, _actions.setVisibility)(_actions.LIST_COMPONENT, false));
+	            dispatch((0, _actions.setVisibility)(_actions.TOOLBOX_COMPONENT, false));
 	        },
-	        onCancelled: function onCancelled() {
-	            dispatch((0, _actions.setVisibility)(false));
+	        onSave: function onSave() {
+	            dispatch((0, _actions.setVisibility)(_actions.CREATE_COMPONENT, false));
+	            dispatch((0, _actions.setVisibility)(_actions.LIST_COMPONENT, true));
+	            dispatch((0, _actions.setVisibility)(_actions.TOOLBOX_COMPONENT, true));
 	        },
-	        onSaved: function onSaved() {
-	            dispatch((0, _actions.setVisibility)(false));
+	        onCancel: function onCancel() {
+	            dispatch((0, _actions.setVisibility)(_actions.CREATE_COMPONENT, false));
+	            dispatch((0, _actions.setVisibility)(_actions.LIST_COMPONENT, true));
+	            dispatch((0, _actions.setVisibility)(_actions.TOOLBOX_COMPONENT, true));
 	        }
 	    };
 	};
@@ -49801,95 +49821,70 @@
 
 	var _reactBootstrap = __webpack_require__(289);
 
-	var _actions = __webpack_require__(260);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var CreateClientForm = function CreateClientForm(_ref) {
+	var Create = function Create(_ref) {
 	    var visible = _ref.visible;
-	    var onCancelled = _ref.onCancelled;
-	    var onSaved = _ref.onSaved;
+	    var onCancel = _ref.onCancel;
+	    var onSave = _ref.onSave;
 
 	    return _react2.default.createElement(
-	        _reactBootstrap.Panel,
-	        { header: 'Create a new client' },
+	        'div',
+	        { className: 'panel panel-default', hidden: !visible },
 	        _react2.default.createElement(
-	            _reactBootstrap.Form,
-	            { inline: true },
+	            'div',
+	            { className: 'panel-heading' },
+	            'Create a new client'
+	        ),
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'panel-body' },
 	            _react2.default.createElement(
-	                _reactBootstrap.FormGroup,
-	                null,
+	                _reactBootstrap.Form,
+	                { inline: true },
 	                _react2.default.createElement(
-	                    _reactBootstrap.ControlLabel,
+	                    _reactBootstrap.FormGroup,
 	                    null,
-	                    'Client Name'
+	                    _react2.default.createElement(
+	                        _reactBootstrap.ControlLabel,
+	                        null,
+	                        'Client Name'
+	                    ),
+	                    ' ',
+	                    _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text', placeholder: 'ACME Industry Pty Ltd' })
 	                ),
 	                ' ',
-	                _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text', placeholder: 'ACME Industry Pty Ltd' })
-	            ),
-	            ' ',
-	            _react2.default.createElement(
-	                _reactBootstrap.Button,
-	                { bsStyle: 'primary', className: 'pull-right', onClick: function onClick() {
-	                        return onSaved();
-	                    } },
-	                'Save'
-	            ),
-	            _react2.default.createElement(
-	                _reactBootstrap.Button,
-	                { className: 'pull-right', onClick: function onClick() {
-	                        return onCancelled();
-	                    } },
-	                'Cancel'
+	                _react2.default.createElement(
+	                    _reactBootstrap.Button,
+	                    { className: 'pull-right', onClick: function onClick() {
+	                            return onSave();
+	                        }, bsStyle: 'primary' },
+	                    'Save'
+	                ),
+	                ' ',
+	                _react2.default.createElement(
+	                    _reactBootstrap.Button,
+	                    { className: 'pull-right', onClick: function onClick() {
+	                            return onCancel();
+	                        } },
+	                    'Cancel'
+	                )
 	            )
 	        )
 	    );
 	};
 
-	CreateClientForm.propTypes = {
-	    visible: _react.PropTypes.bool,
-	    onCancelled: _react.PropTypes.func,
-	    onSaved: _react.PropTypes.func
+	Create.propTypes = {
+	    visible: _react.PropTypes.bool
 	};
 
 	var mapStateToProps = function mapStateToProps(state) {
 	    return {
-	        visible: state.visible
+	        visible: state.client.create_visible
 	    };
 	};
 
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	    return {
-	        onSaved: function (_onSaved) {
-	            function onSaved() {
-	                return _onSaved.apply(this, arguments);
-	            }
-
-	            onSaved.toString = function () {
-	                return _onSaved.toString();
-	            };
-
-	            return onSaved;
-	        }(function () {
-	            dispatch(onSaved());
-	        }),
-	        onCancelled: function (_onCancelled) {
-	            function onCancelled() {
-	                return _onCancelled.apply(this, arguments);
-	            }
-
-	            onCancelled.toString = function () {
-	                return _onCancelled.toString();
-	            };
-
-	            return onCancelled;
-	        }(function () {
-	            dispatch(onCancelled());
-	        })
-	    };
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(CreateClientForm);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Create);
 
 /***/ },
 /* 550 */
@@ -49905,27 +49900,276 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactBootstrap = __webpack_require__(289);
+	var _reactRedux = __webpack_require__(236);
+
+	var _toolbox = __webpack_require__(551);
+
+	var _toolbox2 = _interopRequireDefault(_toolbox);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var CreateClientButton = function CreateClientButton(_ref) {
-	    var _onClick = _ref.onClick;
+	var List = function List(_ref) {
+	    var visible = _ref.visible;
+	    var _onDelete = _ref.onDelete;
+	    var _onArchive = _ref.onArchive;
+	    var _onEmail = _ref.onEmail;
 
 	    return _react2.default.createElement(
-	        _reactBootstrap.Button,
-	        { bsStyle: 'primary', bsSize: 'large', className: 'pull-right', onClick: function onClick() {
-	                return _onClick();
-	            } },
-	        'Create Client'
+	        'div',
+	        { className: 'panel panel-default', hidden: !visible },
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'panel-heading' },
+	            _react2.default.createElement(_toolbox2.default, {
+	                onDelete: function onDelete() {
+	                    return _onDelete();
+	                },
+	                onArchive: function onArchive() {
+	                    return _onArchive();
+	                },
+	                onEmail: function onEmail() {
+	                    return _onEmail();
+	                }
+	            })
+	        ),
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'panel-body' },
+	            _react2.default.createElement(
+	                'table',
+	                { className: 'table' },
+	                _react2.default.createElement(
+	                    'thead',
+	                    null,
+	                    _react2.default.createElement(
+	                        'tr',
+	                        null,
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Select'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'First Name'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Last Name'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Username'
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'tbody',
+	                    null,
+	                    _react2.default.createElement(
+	                        'tr',
+	                        null,
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            _react2.default.createElement('input', { type: 'checkbox' })
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            'John'
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            'Smith'
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            'JohnSmith'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'tr',
+	                        null,
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            _react2.default.createElement('input', { type: 'checkbox' })
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            'John'
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            'Smith'
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            'JohnSmith'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'tr',
+	                        null,
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            _react2.default.createElement('input', { type: 'checkbox' })
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            'John'
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            'Smith'
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            'JohnSmith'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'tr',
+	                        null,
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            _react2.default.createElement('input', { type: 'checkbox' })
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            'John'
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            'Smith'
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            'JohnSmith'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'tr',
+	                        null,
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            _react2.default.createElement('input', { type: 'checkbox' })
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            'John'
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            'Smith'
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            'JohnSmith'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'tr',
+	                        null,
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            _react2.default.createElement('input', { type: 'checkbox' })
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            'John'
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            'Smith'
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            'JohnSmith'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'tr',
+	                        null,
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            _react2.default.createElement('input', { type: 'checkbox' })
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            'John'
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            'Smith'
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            'JohnSmith'
+	                        )
+	                    )
+	                )
+	            )
+	        )
 	    );
 	};
 
-	CreateClientButton.propTypes = {
-	    onClick: _react.PropTypes.func
+	List.propTypes = {
+	    visible: _react.PropTypes.bool,
+	    onDelete: _react.PropTypes.func,
+	    onArchive: _react.PropTypes.func,
+	    onEmail: _react.PropTypes.func
 	};
 
-	exports.default = CreateClientButton;
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        visible: state.client.list_visible
+	    };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        onDelete: function onDelete() {
+	            console.log('delete');
+	        },
+	        onArchive: function onArchive() {
+	            console.log('archive');
+	        },
+	        onEmail: function onEmail() {
+	            console.log('email');
+	        }
+	    };
+	};
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(List);
 
 /***/ },
 /* 551 */
@@ -49941,268 +50185,74 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRedux = __webpack_require__(236);
+
 	var _reactBootstrap = __webpack_require__(289);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var List = function List(props) {
+	var Toolbox = function Toolbox(_ref) {
+	    var visible = _ref.visible;
+	    var onDelete = _ref.onDelete;
+	    var onArchive = _ref.onArchive;
+	    var onEmail = _ref.onEmail;
+
 	    return _react2.default.createElement(
-	        'div',
-	        { className: 'panel panel-default' },
+	        _reactBootstrap.ButtonToolbar,
+	        { hidden: !visible },
 	        _react2.default.createElement(
-	            'div',
-	            { className: 'panel-heading' },
+	            _reactBootstrap.ButtonGroup,
+	            null,
 	            _react2.default.createElement(
-	                _reactBootstrap.ButtonToolbar,
-	                null,
-	                _react2.default.createElement(
-	                    _reactBootstrap.ButtonGroup,
-	                    null,
-	                    _react2.default.createElement(
-	                        _reactBootstrap.Button,
-	                        null,
-	                        'Archive'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    _reactBootstrap.ButtonGroup,
-	                    null,
-	                    _react2.default.createElement(
-	                        _reactBootstrap.Button,
-	                        { bsStyle: 'danger' },
-	                        'Delete'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    _reactBootstrap.ButtonGroup,
-	                    null,
-	                    _react2.default.createElement(
-	                        _reactBootstrap.Button,
-	                        null,
-	                        'Email'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    _reactBootstrap.ButtonGroup,
-	                    { className: 'pull-right' },
-	                    _react2.default.createElement(
-	                        _reactBootstrap.Button,
-	                        null,
-	                        'Search'
-	                    )
-	                )
+	                _reactBootstrap.Button,
+	                { bsStyle: 'danger', onClick: function onClick() {
+	                        return onDelete();
+	                    } },
+	                _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'trash' }),
+	                ' Delete'
+	            ),
+	            _react2.default.createElement(
+	                _reactBootstrap.Button,
+	                { onClick: function onClick() {
+	                        return onArchive();
+	                    } },
+	                'Archive'
+	            ),
+	            _react2.default.createElement(
+	                _reactBootstrap.Button,
+	                { onClick: function onClick() {
+	                        return onEmail();
+	                    } },
+	                'Email'
 	            )
 	        ),
 	        _react2.default.createElement(
-	            'table',
-	            { className: 'table' },
+	            _reactBootstrap.ButtonGroup,
+	            { className: 'pull-right' },
 	            _react2.default.createElement(
-	                'thead',
+	                _reactBootstrap.Button,
 	                null,
-	                _react2.default.createElement(
-	                    'tr',
-	                    null,
-	                    _react2.default.createElement(
-	                        'th',
-	                        null,
-	                        'Select'
-	                    ),
-	                    _react2.default.createElement(
-	                        'th',
-	                        null,
-	                        'First Name'
-	                    ),
-	                    _react2.default.createElement(
-	                        'th',
-	                        null,
-	                        'Last Name'
-	                    ),
-	                    _react2.default.createElement(
-	                        'th',
-	                        null,
-	                        'Username'
-	                    )
-	                )
-	            ),
-	            _react2.default.createElement(
-	                'tbody',
-	                null,
-	                _react2.default.createElement(
-	                    'tr',
-	                    null,
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        _react2.default.createElement('input', { type: 'checkbox' })
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        'John'
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        'Smith'
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        'JohnSmith'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'tr',
-	                    null,
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        _react2.default.createElement('input', { type: 'checkbox' })
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        'John'
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        'Smith'
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        'JohnSmith'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'tr',
-	                    null,
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        _react2.default.createElement('input', { type: 'checkbox' })
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        'John'
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        'Smith'
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        'JohnSmith'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'tr',
-	                    null,
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        _react2.default.createElement('input', { type: 'checkbox' })
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        'John'
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        'Smith'
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        'JohnSmith'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'tr',
-	                    null,
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        _react2.default.createElement('input', { type: 'checkbox' })
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        'John'
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        'Smith'
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        'JohnSmith'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'tr',
-	                    null,
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        _react2.default.createElement('input', { type: 'checkbox' })
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        'John'
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        'Smith'
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        'JohnSmith'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'tr',
-	                    null,
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        _react2.default.createElement('input', { type: 'checkbox' })
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        'John'
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        'Smith'
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        'JohnSmith'
-	                    )
-	                )
+	                _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'search' }),
+	                ' Search'
 	            )
 	        )
 	    );
 	};
 
-	List.propTypes = {};
+	Toolbox.propTypes = {
+	    visible: _react.PropTypes.bool,
+	    onDelete: _react.PropTypes.func,
+	    onArchive: _react.PropTypes.func,
+	    onEmail: _react.PropTypes.func
+	};
 
-	exports.default = List;
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        visible: state.client.toolbox_visible
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Toolbox);
 
 /***/ },
 /* 552 */

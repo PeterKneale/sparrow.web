@@ -1,15 +1,16 @@
 import React from 'react'
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom'
 import { Router, Route, hashHistory } from 'react-router'
 import { Provider } from 'react-redux'
-import { store } from './store';
+import { store } from './store'
 
-import document from './globals';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/css/bootstrap-theme.css';
-import './theme/theme.css';
+import document from './globals'
+import 'bootstrap/less/bootstrap.less'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap/dist/css/bootstrap-theme.css'
+import './theme/theme.css'
 
-import App from './app';
+import App from './app'
 import Home from './modules/home'
 import Estimates from './modules/estimates'
 import Invoices from './modules/invoices'

@@ -40,6 +40,10 @@ module.exports = {
                     require.resolve('sass-loader') + '?sourceMap'
                 ],
             }, {
+                test: /\.less$/, 
+                loader: 'style!css!less'
+            }, 
+            {
                 test: /\.json$/,
                 loader: 'json-loader',
             }, {

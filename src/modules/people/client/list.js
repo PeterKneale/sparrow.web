@@ -1,31 +1,17 @@
-import React, {PropTypes} from 'react'
-import { Checkbox, ButtonToolbar, ButtonGroup, Button } from 'react-bootstrap';
-
-const List = props => {
+import React, {PropTypes} from 'react';
+import { connect } from 'react-redux'
+import Toolbox from './toolbox';
+const List = ({visible, onDelete, onArchive, onEmail}) => {
     return (
-            <div className="panel panel-default">
-
-                <div className="panel-heading">
-
-                    <ButtonToolbar>
-
-                        <ButtonGroup>
-                            <Button>Archive</Button>
-                        </ButtonGroup>
-                        <ButtonGroup>
-                            <Button bsStyle="danger">Delete</Button>
-                        </ButtonGroup>
-                        <ButtonGroup>
-                            <Button>Email</Button>
-                        </ButtonGroup>
-
-                        <ButtonGroup className="pull-right">
-                            <Button>Search</Button>
-                        </ButtonGroup>
-
-                    </ButtonToolbar>
-                </div>
-
+        <div className="panel panel-default" hidden={!visible}>
+            <div className="panel-heading">
+                <Toolbox
+                    onDelete={() => onDelete() }
+                    onArchive={() => onArchive() }
+                    onEmail={() => onEmail() }
+                    />
+            </div>
+            <div className="panel-body">
                 <table className="table">
                     <thead>
                         <tr>
@@ -45,11 +31,36 @@ const List = props => {
                     </tbody>
                 </table>
             </div>
-    )
-}
+        </div>
+    );
+};
 
 List.propTypes = {
-    
+    visible: PropTypes.bool,
+    onDelete: PropTypes.func,
+    onArchive: PropTypes.func,
+    onEmail: PropTypes.func
 }
 
-export default List
+const mapStateToProps = (state) => {
+    return {
+        visible: state.client.list_visible
+    }
+}
+
+const mapDispatchToProps = (dispatch) => ({
+    onDelete: () => {
+        console.log('delete')
+    },
+    onArchive: () => {
+        console.log('archive')
+    },
+    onEmail: () => {
+        console.log('email')
+    }
+});
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(List)
+
