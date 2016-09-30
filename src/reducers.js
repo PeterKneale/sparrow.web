@@ -1,8 +1,9 @@
 import { combineReducers } from 'redux'
-import { clientReducer } from './modules/people/client/actions'
+import { userDataReducer, userModeReducer } from './modules/people/client/actions'
 
 const rootReducer = combineReducers({
-  client: clientReducer
+  users: userDataReducer,
+  mode: userModeReducer
 });
 
 export default rootReducer

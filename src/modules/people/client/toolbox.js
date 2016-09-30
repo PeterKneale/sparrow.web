@@ -26,7 +26,7 @@ Toolbox.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        visible: state.client.toolbox_visible
+        visible: state.mode.toolbox_visible
     }
 }
 

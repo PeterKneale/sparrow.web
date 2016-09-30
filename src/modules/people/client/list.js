@@ -44,7 +44,7 @@ List.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        visible: state.client.list_visible
+        visible: state.mode.list_visible
     }
 }
 

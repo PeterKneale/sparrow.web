@@ -31,7 +31,7 @@ Create.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        visible: state.client.create_visible
+        visible: state.mode.create_visible
     }
 }
 
