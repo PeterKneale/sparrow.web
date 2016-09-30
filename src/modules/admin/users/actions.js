@@ -28,8 +28,7 @@ export const requestUsersFail = (message) => ({
 
 export const receiveUsers = (json) => ({
     type: RECEIVE_USERS,
-    users: json.map(user => user),
-    receivedAt: Date.now()
+    users: json.map(user => user)
 })
 
 export function fetchUsers() {
@@ -68,8 +67,7 @@ export function fetchUsersIfNeeded() {
 const initialDataState = {
     loading: false,
     stale: true,
-    users: [],
-    updatedAt: null
+    users: []
 }
 
 export function userDataReducer(state = initialDataState, action) {
@@ -87,8 +85,7 @@ export function userDataReducer(state = initialDataState, action) {
             return Object.assign({}, state, {
                 loading: false,
                 stale: false,
-                users: action.users,
-                updatedAt: action.receivedAt
+                users: action.users
             })
         case REQUEST_USERS_FAIL:
             return Object.assign({}, state, {

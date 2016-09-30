@@ -14,11 +14,7 @@ const List = ({users, loading, visible, error_visible, error_message,  onDelete,
         {!error_visible ?
             <div className="panel panel-default" hidden={!visible}>
                 <div className="panel-heading">
-                    <Toolbox
-                        onDelete={() => onDelete() }
-                        onArchive={() => onArchive() }
-                        onEmail={() => onEmail() }
-                        />
+                    <Toolbox onDelete={() => onDelete() } onArchive={() => onArchive() } onEmail={() => onEmail() } />
                 </div>
                 <table className="table">
                     <thead>
