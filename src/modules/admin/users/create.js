@@ -2,9 +2,9 @@ import React, {PropTypes} from 'react'
 import { connect } from 'react-redux'
 import { PanelBody, Form, FormGroup, ControlLabel, FormControl, Button, Glyphicon } from 'react-bootstrap';
 
-const Create = ({visible, onCancel, onSave}) => {
+const Create = ({create_visible, onCancel, onSave}) => {
     return (
-        <div className="panel panel-default" hidden={!visible}>
+        <div className="panel panel-default" hidden={!create_visible}>
             <div className="panel-heading">
                 Create a new client
             </div>
@@ -26,12 +26,12 @@ const Create = ({visible, onCancel, onSave}) => {
 }
 
 Create.propTypes = {
-    visible: PropTypes.bool
+    create_visible: PropTypes.bool
 }
 
 const mapStateToProps = (state) => {
     return {
-        visible: state.mode.create_visible
+        create_visible: state.users.create_visible
     }
 }
 

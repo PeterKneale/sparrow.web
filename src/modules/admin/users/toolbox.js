@@ -2,9 +2,9 @@ import React, {PropTypes} from 'react'
 import { connect } from 'react-redux'
 import { ButtonToolbar, ButtonGroup, Button, Glyphicon } from 'react-bootstrap';
 
-const Toolbox = ({visible, onDelete, onArchive, onEmail}) => {
+const Toolbox = ({onDelete, onArchive, onEmail}) => {
     return (
-        <ButtonToolbar hidden={!visible}>
+        <ButtonToolbar>
             <Button bsSize="small" onClick={() => onEmail() }><Glyphicon glyph="envelope" /> Email</Button>
             <Button bsSize="small" onClick={() => onArchive() }><Glyphicon glyph="trash" /> Archive</Button>
             <Button bsSize="small" onClick={() => onDelete() }><Glyphicon glyph="trash" /> Delete</Button>
@@ -14,16 +14,13 @@ const Toolbox = ({visible, onDelete, onArchive, onEmail}) => {
 }
 
 Toolbox.propTypes = {
-    visible: PropTypes.bool,
     onDelete: PropTypes.func,
     onArchive: PropTypes.func,
     onEmail: PropTypes.func
 }
 
 const mapStateToProps = (state) => {
-    return {
-        visible: state.mode.toolbox_visible
-    }
+    return {}
 }
 
 export default connect(

@@ -41,11 +41,10 @@ export function fetchUsers() {
     }
 }
 
-
 function shouldFetchUsers(state) {
-    if (!state.users) {
+    if (!state.users.data) {
         return true
-    } else if (state.loading) {
+    } else if (state.users.loading) {
         return false
     } else {
         return state.users.stale
@@ -62,15 +61,21 @@ export function fetchUsersIfNeeded() {
     }
 }
 
-// reducers
+// state
 
-const initialDataState = {
+const initialState = {
+    data: [],    
     loading: false,
     stale: true,
-    users: []
+    list_visible: true,
+    create_visible: false,
+    error_visible: false,
+    error_message: null
 }
 
-export function userDataReducer(state = initialDataState, action) {
+// reducers
+
+export function userReducer(state = initialState, action) {
     switch (action.type) {
         case INVALIDATE_USERS:
             return Object.assign({}, state, {
@@ -78,64 +83,41 @@ export function userDataReducer(state = initialDataState, action) {
             })
         case REQUEST_USERS:
             return Object.assign({}, state, {
-                loading: true,
-                stale: false
+                stale: false,
+                loading: true
             })
         case RECEIVE_USERS:
             return Object.assign({}, state, {
-                loading: false,
                 stale: false,
-                users: action.users
+                loading: false,
+                list_visible: true,
+                data: action.users
             })
         case REQUEST_USERS_FAIL:
             return Object.assign({}, state, {
-                loading: false,
                 stale: false,
-                users: null,
+                loading: false,
+                list_visible: false,
+                data: null,
+                error_visible: true,
+                error_message: action.message,
+                create_visible: false
             });
-        default:
-            return state
-    }
-}
 
-const initialModeState = {
-    create_visible: false,
-    list_visible: true,
-    list_error_visible: false,
-    list_error_message: null,
-    toolbox_visible: true
-}
-
-export function userModeReducer(state = initialModeState, action) {
-    switch (action.type) {
         case MODE_SET:
             switch (action.mode) {
                 case MODE_CREATE:
                     return Object.assign({}, state, {
                         create_visible: true,
-                        list_visible: false,
-                        toolbox_visible: false
+                        list_visible: false
                     });
                 case MODE_READ:
                     return Object.assign({}, state, {
                         create_visible: false,
-                        list_visible: true,
-                        toolbox_visible: true
+                        list_visible: true
                     });
-                default:
-                    return state;
             }
-
-        case REQUEST_USERS_FAIL:
-            return Object.assign({}, state, {
-                list_error_visible: true,
-                list_error_message: action.message,
-
-                create_visible: false,
-                list_visible: false,
-                toolbox_visible: false
-            });
         default:
-            return state;
+            return state
     }
 }

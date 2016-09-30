@@ -5,38 +5,41 @@ import Toolbox from './toolbox';
 import Spinner from '../../../components/spinner';
 import Error from '../../../components/error';
 
-const List = ({users, loading, visible, error_visible, error_message,  onDelete, onArchive, onEmail}) => {
+const List = ({onDelete, onArchive, onEmail, loading, data, list_visible, error_visible, error_message}) => {
     return (
     <div>
-        <Spinner spin={loading}/>
-        <Error error={error_visible} message={error_message}/>
-        { !error_visible ? 
-        <div className="panel panel-default" hidden={!visible || loading}>
-            <div className="panel-heading">
-                <Toolbox onDelete={() => onDelete() } onArchive={() => onArchive() } onEmail={() => onEmail() } />
-            </div>
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th>Select</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Username</th></tr>
-                </thead>
-                <tbody>
-                    { users.map(function(user) {
-                            return <tr key={user.id}>
-                                        <td><input type="checkbox"/></td>
-                                        <td>{user.first_name}</td>
-                                        <td>{user.last_name}</td>
-                                        <td>{user.name}</td>
-                                </tr>
-                        })}
-                </tbody>
-            </table>
-        </div>
-        :
-        null}
+        <Error message={error_message} visible={error_visible}/>
+        { loading ?
+            <Spinner visible={loading}/>
+            :
+            list_visible ? 
+                <div className="panel panel-default">
+                    <div className="panel-heading">
+                        <Toolbox onDelete={() => onDelete() } onArchive={() => onArchive() } onEmail={() => onEmail() } />
+                    </div>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Select</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Username</th></tr>
+                        </thead>
+                        <tbody>
+                            { data.map(function(user) {
+                                    return <tr key={user.id}>
+                                                <td><input type="checkbox"/></td>
+                                                <td>{user.first_name}</td>
+                                                <td>{user.last_name}</td>
+                                                <td>{user.name}</td>
+                                        </tr>
+                                })}
+                        </tbody>
+                    </table>
+                </div>
+                :
+                null}
+            
     </div>
     );
 }
@@ -45,20 +48,21 @@ List.propTypes = {
     onDelete: PropTypes.func,
     onArchive: PropTypes.func,
     onEmail: PropTypes.func,
+
     loading : PropTypes.bool,
-    visible: PropTypes.bool,
-    users: PropTypes.array,
+    data: PropTypes.array,
+    list_visible: PropTypes.bool,
     error_visible: PropTypes.bool,
     error_message: PropTypes.string
 }
 
 const mapStateToProps = (state) => {
     return {
-        visible: state.mode.list_visible,
-        users: state.data.users,
-        loading: state.data.loading,
-        error_visible: state.mode.list_error_visible,
-        error_message: state.mode.list_error_message
+        data: state.users.data,
+        loading: state.users.loading,
+        list_visible: state.users.list_visible,
+        error_visible: state.users.error_visible,
+        error_message: state.users.error_message
     }
 }
 
