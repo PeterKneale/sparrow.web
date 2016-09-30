@@ -1,14 +1,17 @@
 import React, {PropTypes} from 'react';
 import { connect } from 'react-redux'
 import { Panel } from 'react-bootstrap';
-
 import Toolbox from './toolbox';
-const List = ({users, visible, error_visible, error_message,  onDelete, onArchive, onEmail}) => {
+import Spinner from '../../../components/spinner';
+import Error from '../../../components/error';
+
+const List = ({users, loading, visible, error_visible, error_message,  onDelete, onArchive, onEmail}) => {
     return (
     <div>
-        {error_visible ?
-            <Panel header="Error" bsStyle="danger">{error_message}</Panel>
-            :
+        <Spinner spin={loading}/>
+        <Error error={error_visible} message={error_message}/>
+
+        {!error_visible ?
             <div className="panel panel-default" hidden={!visible}>
                 <div className="panel-heading">
                     <Toolbox
@@ -37,7 +40,8 @@ const List = ({users, visible, error_visible, error_message,  onDelete, onArchiv
                     </tbody>
                 </table>
             </div>
-
+            :
+            <div></div>
         }
     </div>
     );
@@ -47,7 +51,7 @@ List.propTypes = {
     onDelete: PropTypes.func,
     onArchive: PropTypes.func,
     onEmail: PropTypes.func,
-
+    loading : PropTypes.bool,
     visible: PropTypes.bool,
     users: PropTypes.array,
     error_visible: PropTypes.bool,
@@ -58,6 +62,7 @@ const mapStateToProps = (state) => {
     return {
         visible: state.mode.list_visible,
         users: state.data.users,
+        loading: state.data.loading,
         error_visible: state.mode.list_error_visible,
         error_message: state.mode.list_error_message
     }

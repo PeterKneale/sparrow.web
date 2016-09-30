@@ -36737,7 +36737,8 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.fetchUsers = exports.receiveUsers = exports.requestUsers = exports.invalidateUsers = exports.setMode = exports.RECEIVE_USERS = exports.REQUEST_USERS = exports.INVALIDATE_USERS = exports.MODE_READ = exports.MODE_CREATE = exports.MODE_SET = undefined;
+	exports.receiveUsers = exports.requestUsersFail = exports.requestUsers = exports.invalidateUsers = exports.setMode = exports.REQUEST_USERS_FAIL = exports.RECEIVE_USERS = exports.REQUEST_USERS = exports.INVALIDATE_USERS = exports.MODE_READ = exports.MODE_CREATE = exports.MODE_SET = undefined;
+	exports.fetchUsers = fetchUsers;
 	exports.fetchUsersIfNeeded = fetchUsersIfNeeded;
 	exports.userDataReducer = userDataReducer;
 	exports.userModeReducer = userModeReducer;
@@ -36755,6 +36756,7 @@
 	var INVALIDATE_USERS = exports.INVALIDATE_USERS = 'INVALIDATE_USERS';
 	var REQUEST_USERS = exports.REQUEST_USERS = 'REQUEST_USERS';
 	var RECEIVE_USERS = exports.RECEIVE_USERS = 'RECEIVE_USERS';
+	var REQUEST_USERS_FAIL = exports.REQUEST_USERS_FAIL = 'REQUEST_USERS_FAIL';
 
 	// Action Methods
 	var setMode = exports.setMode = function setMode(mode) {
@@ -36774,32 +36776,35 @@
 	        type: REQUEST_USERS
 	    };
 	};
+	var requestUsersFail = exports.requestUsersFail = function requestUsersFail(message) {
+	    return {
+	        type: REQUEST_USERS_FAIL,
+	        message: message
+	    };
+	};
 
 	var receiveUsers = exports.receiveUsers = function receiveUsers(json) {
 	    return {
 	        type: RECEIVE_USERS,
-	        users: json,
+	        users: json.map(function (user) {
+	            return user;
+	        }),
 	        receivedAt: Date.now()
 	    };
 	};
 
-	// export function fetchUsers() {
-	//     return (dispatch) => {
-	//         dispatch(requestUsers())
-	//         return fetch(`http://localhost/users`)
-	//             .then(response => response.json())
-	//             .then(json => dispatch(receiveUsers(json)))
-	//     }
-	// }
-
-	var fetchUsers = exports.fetchUsers = function fetchUsers() {
+	function fetchUsers() {
 	    return function (dispatch) {
 	        dispatch(requestUsers());
-	        var response = (0, _isomorphicFetch2.default)('http://localhost/users');
-	        var json = response.json();
-	        dispatch(receiveUsers(json));
+	        return (0, _isomorphicFetch2.default)('http://localhost/users').then(function (response) {
+	            return response.json();
+	        }).then(function (json) {
+	            return dispatch(receiveUsers(json));
+	        }).catch(function (e) {
+	            return dispatch(requestUsersFail("Unable to load users at this time."));
+	        });
 	    };
-	};
+	}
 
 	function shouldFetchUsers(state) {
 	    if (!state.users) {
@@ -36851,6 +36856,12 @@
 	                users: action.users,
 	                updatedAt: action.receivedAt
 	            });
+	        case REQUEST_USERS_FAIL:
+	            return Object.assign({}, state, {
+	                loading: false,
+	                stale: false,
+	                users: null
+	            });
 	        default:
 	            return state;
 	    }
@@ -36859,6 +36870,8 @@
 	var initialModeState = {
 	    create_visible: false,
 	    list_visible: true,
+	    list_error_visible: false,
+	    list_error_message: null,
 	    toolbox_visible: true
 	};
 
@@ -36884,6 +36897,16 @@
 	                default:
 	                    return state;
 	            }
+
+	        case REQUEST_USERS_FAIL:
+	            return Object.assign({}, state, {
+	                list_error_visible: true,
+	                list_error_message: action.message,
+
+	                create_visible: false,
+	                list_visible: false,
+	                toolbox_visible: false
+	            });
 	        default:
 	            return state;
 	    }
@@ -38925,7 +38948,7 @@
 
 
 	// module
-	exports.push([module.id, "body {\n  padding-top: 20px;\n  padding-bottom: 20px; }\n", "", {"version":3,"sources":["/./src/theme/src/theme/theme.css"],"names":[],"mappings":"AAAA;EACE,kBAAkB;EAClB,qBAAqB,EACtB","file":"theme.css","sourcesContent":["body {\r\n  padding-top: 20px;\r\n  padding-bottom: 20px;\r\n}"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "body {\n  padding-top: 20px;\n  padding-bottom: 20px; }\n\ndiv.spinner {\n  margin: auto;\n  position: absolute;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  height: 65px;\n  text-align: center; }\n", "", {"version":3,"sources":["/./src/theme/src/theme/theme.css"],"names":[],"mappings":"AAAA;EACE,kBAAkB;EAClB,qBAAqB,EACtB;;AAED;EACE,aAAa;EACb,mBAAmB;EACnB,OAAO;EAAE,QAAQ;EAAE,UAAU;EAAE,SAAS;EACxC,aAAa;EACb,mBAAmB,EACpB","file":"theme.css","sourcesContent":["body {\r\n  padding-top: 20px;\r\n  padding-bottom: 20px;\r\n}\r\n\r\ndiv.spinner {\r\n  margin: auto;\r\n  position: absolute;\r\n  top: 0; left: 0; bottom: 0; right: 0;\r\n  height: 65px;\r\n  text-align: center;\r\n}\r\n"],"sourceRoot":"webpack://"}]);
 
 	// exports
 
@@ -58540,6 +58563,8 @@
 
 	var _reactRedux = __webpack_require__(601);
 
+	var _reactBootstrap = __webpack_require__(662);
+
 	var _toolbox = __webpack_require__(923);
 
 	var _toolbox2 = _interopRequireDefault(_toolbox);
@@ -58549,104 +58574,120 @@
 	var List = function List(_ref) {
 	    var users = _ref.users;
 	    var visible = _ref.visible;
+	    var error_visible = _ref.error_visible;
+	    var error_message = _ref.error_message;
 	    var _onDelete = _ref.onDelete;
 	    var _onArchive = _ref.onArchive;
 	    var _onEmail = _ref.onEmail;
 
 	    return _react2.default.createElement(
 	        'div',
-	        { className: 'panel panel-default', hidden: !visible },
-	        _react2.default.createElement(
+	        null,
+	        error_visible ? _react2.default.createElement(
+	            _reactBootstrap.Panel,
+	            { header: 'Error', bsStyle: 'danger' },
+	            error_message
+	        ) : _react2.default.createElement(
 	            'div',
-	            { className: 'panel-heading' },
-	            _react2.default.createElement(_toolbox2.default, {
-	                onDelete: function onDelete() {
-	                    return _onDelete();
-	                },
-	                onArchive: function onArchive() {
-	                    return _onArchive();
-	                },
-	                onEmail: function onEmail() {
-	                    return _onEmail();
-	                }
-	            })
-	        ),
-	        _react2.default.createElement(
-	            'table',
-	            { className: 'table' },
+	            { className: 'panel panel-default', hidden: !visible },
 	            _react2.default.createElement(
-	                'thead',
-	                null,
-	                _react2.default.createElement(
-	                    'tr',
-	                    null,
-	                    _react2.default.createElement(
-	                        'th',
-	                        null,
-	                        'Select'
-	                    ),
-	                    _react2.default.createElement(
-	                        'th',
-	                        null,
-	                        'First Name'
-	                    ),
-	                    _react2.default.createElement(
-	                        'th',
-	                        null,
-	                        'Last Name'
-	                    ),
-	                    _react2.default.createElement(
-	                        'th',
-	                        null,
-	                        'Username'
-	                    )
-	                )
+	                'div',
+	                { className: 'panel-heading' },
+	                _react2.default.createElement(_toolbox2.default, {
+	                    onDelete: function onDelete() {
+	                        return _onDelete();
+	                    },
+	                    onArchive: function onArchive() {
+	                        return _onArchive();
+	                    },
+	                    onEmail: function onEmail() {
+	                        return _onEmail();
+	                    }
+	                })
 	            ),
 	            _react2.default.createElement(
-	                'tbody',
-	                null,
-	                users.map(function (user) {
-	                    return _react2.default.createElement(
+	                'table',
+	                { className: 'table' },
+	                _react2.default.createElement(
+	                    'thead',
+	                    null,
+	                    _react2.default.createElement(
 	                        'tr',
-	                        { key: user.id },
+	                        null,
 	                        _react2.default.createElement(
-	                            'td',
+	                            'th',
 	                            null,
-	                            _react2.default.createElement('input', { type: 'checkbox' })
+	                            'Select'
 	                        ),
 	                        _react2.default.createElement(
-	                            'td',
+	                            'th',
 	                            null,
-	                            user.first_name
+	                            'First Name'
 	                        ),
 	                        _react2.default.createElement(
-	                            'td',
+	                            'th',
 	                            null,
-	                            user.last_name
+	                            'Last Name'
 	                        ),
 	                        _react2.default.createElement(
-	                            'td',
+	                            'th',
 	                            null,
-	                            user.name
+	                            'Username'
 	                        )
-	                    );
-	                })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'tbody',
+	                    null,
+	                    users.map(function (user) {
+	                        return _react2.default.createElement(
+	                            'tr',
+	                            { key: user.id },
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                _react2.default.createElement('input', { type: 'checkbox' })
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                user.first_name
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                user.last_name
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                user.name
+	                            )
+	                        );
+	                    })
+	                )
 	            )
 	        )
 	    );
 	};
 
 	List.propTypes = {
-	    visible: _react.PropTypes.bool,
 	    onDelete: _react.PropTypes.func,
 	    onArchive: _react.PropTypes.func,
-	    onEmail: _react.PropTypes.func
+	    onEmail: _react.PropTypes.func,
+
+	    visible: _react.PropTypes.bool,
+	    users: _react.PropTypes.array,
+	    error_visible: _react.PropTypes.bool,
+	    error_message: _react.PropTypes.string
 	};
 
 	var mapStateToProps = function mapStateToProps(state) {
 	    return {
 	        visible: state.mode.list_visible,
-	        users: state.data.users
+	        users: state.data.users,
+	        error_visible: state.mode.list_error_visible,
+	        error_message: state.mode.list_error_message
 	    };
 	};
 
