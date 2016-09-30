@@ -7,6 +7,7 @@ export const MODE_READ = 'MODE_READ'
 export const INVALIDATE_USERS = 'INVALIDATE_USERS'
 export const REQUEST_USERS = 'REQUEST_USERS'
 export const RECEIVE_USERS = 'RECEIVE_USERS'
+export const REQUEST_USERS_FAIL = 'REQUEST_USERS_FAIL'
 
 // Action Methods
 export const setMode = (mode) => ({
@@ -20,11 +21,15 @@ export const invalidateUsers = () => ({
 export const requestUsers = () => ({
     type: REQUEST_USERS
 })
+export const requestUsersFail = (message) => ({
+    type: REQUEST_USERS_FAIL,
+    message: message
+})
 
 export const receiveUsers = (json) => ({
-        type: RECEIVE_USERS,
-        users: json.map(user => user),
-        receivedAt: Date.now()
+    type: RECEIVE_USERS,
+    users: json.map(user => user),
+    receivedAt: Date.now()
 })
 
 export function fetchUsers() {
@@ -33,8 +38,10 @@ export function fetchUsers() {
         return fetch(`http://localhost/users`)
             .then(response => response.json())
             .then(json => dispatch(receiveUsers(json)))
+            .catch(e=>dispatch(requestUsersFail("Unable to load users at this time.")));
     }
 }
+
 
 function shouldFetchUsers(state) {
     if (!state.users) {
@@ -55,6 +62,7 @@ export function fetchUsersIfNeeded() {
         }
     }
 }
+
 // reducers
 
 const initialDataState = {
@@ -82,6 +90,12 @@ export function userDataReducer(state = initialDataState, action) {
                 users: action.users,
                 updatedAt: action.receivedAt
             })
+        case REQUEST_USERS_FAIL:
+            return Object.assign({}, state, {
+                loading: false,
+                stale: false,
+                users: null,
+            });
         default:
             return state
     }
@@ -90,31 +104,40 @@ export function userDataReducer(state = initialDataState, action) {
 const initialModeState = {
     create_visible: false,
     list_visible: true,
+    list_error_visible: false,
+    list_error_message: null,
     toolbox_visible: true
 }
-
 
 export function userModeReducer(state = initialModeState, action) {
     switch (action.type) {
         case MODE_SET:
-            {
-                switch (action.mode) {
-                    case MODE_CREATE:
-                        return Object.assign({}, state, {
-                            create_visible: true,
-                            list_visible: false,
-                            toolbox_visible: false
-                        });
-                    case MODE_READ:
-                        return Object.assign({}, state, {
-                            create_visible: false,
-                            list_visible: true,
-                            toolbox_visible: true
-                        });
-                    default:
-                        return state;
-                }
+            switch (action.mode) {
+                case MODE_CREATE:
+                    return Object.assign({}, state, {
+                        create_visible: true,
+                        list_visible: false,
+                        toolbox_visible: false
+                    });
+                case MODE_READ:
+                    return Object.assign({}, state, {
+                        create_visible: false,
+                        list_visible: true,
+                        toolbox_visible: true
+                    });
+                default:
+                    return state;
             }
+
+        case REQUEST_USERS_FAIL:
+            return Object.assign({}, state, {
+                list_error_visible: true,
+                list_error_message: action.message,
+
+                create_visible: false,
+                list_visible: false,
+                toolbox_visible: false
+            });
         default:
             return state;
     }

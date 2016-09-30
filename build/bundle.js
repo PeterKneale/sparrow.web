@@ -166,35 +166,35 @@
 
 	var _invoices2 = _interopRequireDefault(_invoices);
 
-	var _admin = __webpack_require__(919);
+	var _admin = __webpack_require__(918);
 
 	var _admin2 = _interopRequireDefault(_admin);
 
-	var _index = __webpack_require__(921);
+	var _index = __webpack_require__(920);
 
 	var _index2 = _interopRequireDefault(_index);
 
-	var _user = __webpack_require__(925);
+	var _user = __webpack_require__(924);
 
 	var _user2 = _interopRequireDefault(_user);
 
-	var _account = __webpack_require__(926);
+	var _account = __webpack_require__(925);
 
 	var _account2 = _interopRequireDefault(_account);
 
-	var _settings = __webpack_require__(927);
+	var _settings = __webpack_require__(926);
 
 	var _settings2 = _interopRequireDefault(_settings);
 
-	var _expenses = __webpack_require__(928);
+	var _expenses = __webpack_require__(927);
 
 	var _expenses2 = _interopRequireDefault(_expenses);
 
-	var _timesheets = __webpack_require__(929);
+	var _timesheets = __webpack_require__(928);
 
 	var _timesheets2 = _interopRequireDefault(_timesheets);
 
-	var _reporting = __webpack_require__(930);
+	var _reporting = __webpack_require__(929);
 
 	var _reporting2 = _interopRequireDefault(_reporting);
 
@@ -221,7 +221,7 @@
 	                    _react2.default.createElement(_reactRouter.Route, { path: '/admin/users/:id', component: _index2.default })
 	                ),
 	                _react2.default.createElement(_reactRouter.Route, { path: '/admin/account', component: _account2.default }),
-	                _react2.default.createElement(_reactRouter.Route, { path: '/admin/setting', component: _settings2.default })
+	                _react2.default.createElement(_reactRouter.Route, { path: '/admin/settings', component: _settings2.default })
 	            ),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/expenses', component: _expenses2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/timesheets', component: _timesheets2.default }),
@@ -36705,9 +36705,7 @@
 	  return f;
 	}));
 
-	store.dispatch((0, _actions.fetchUsersIfNeeded)()).then(function () {
-	  return console.log(store.getState());
-	});
+	store.dispatch((0, _actions.fetchUsersIfNeeded)());
 
 /***/ },
 /* 623 */
@@ -36739,11 +36737,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.setMode = exports.RECEIVE_USERS = exports.REQUEST_USERS = exports.INVALIDATE_USERS = exports.MODE_READ = exports.MODE_CREATE = exports.MODE_SET = undefined;
-	exports.invalidateUsers = invalidateUsers;
-	exports.requestUsers = requestUsers;
-	exports.receiveUsers = receiveUsers;
-	exports.fetchUsers = fetchUsers;
+	exports.fetchUsers = exports.receiveUsers = exports.requestUsers = exports.invalidateUsers = exports.setMode = exports.RECEIVE_USERS = exports.REQUEST_USERS = exports.INVALIDATE_USERS = exports.MODE_READ = exports.MODE_CREATE = exports.MODE_SET = undefined;
 	exports.fetchUsersIfNeeded = fetchUsersIfNeeded;
 	exports.userDataReducer = userDataReducer;
 	exports.userModeReducer = userModeReducer;
@@ -36769,35 +36763,43 @@
 	        mode: mode
 	    };
 	};
-	function invalidateUsers() {
+	var invalidateUsers = exports.invalidateUsers = function invalidateUsers() {
 	    return {
 	        type: INVALIDATE_USERS
 	    };
-	}
-	function requestUsers() {
+	};
+
+	var requestUsers = exports.requestUsers = function requestUsers() {
 	    return {
 	        type: REQUEST_USERS
 	    };
-	}
-	function receiveUsers(json) {
+	};
+
+	var receiveUsers = exports.receiveUsers = function receiveUsers(json) {
 	    return {
 	        type: RECEIVE_USERS,
-	        users: json.map(function (user) {
-	            return user;
-	        }),
+	        users: json,
 	        receivedAt: Date.now()
 	    };
-	}
-	function fetchUsers() {
+	};
+
+	// export function fetchUsers() {
+	//     return (dispatch) => {
+	//         dispatch(requestUsers())
+	//         return fetch(`http://localhost/users`)
+	//             .then(response => response.json())
+	//             .then(json => dispatch(receiveUsers(json)))
+	//     }
+	// }
+
+	var fetchUsers = exports.fetchUsers = function fetchUsers() {
 	    return function (dispatch) {
 	        dispatch(requestUsers());
-	        return (0, _isomorphicFetch2.default)('http://localhost/users').then(function (response) {
-	            return response.json();
-	        }).then(function (json) {
-	            return dispatch(receiveUsers(json));
-	        });
+	        var response = (0, _isomorphicFetch2.default)('http://localhost/users');
+	        var json = response.json();
+	        dispatch(receiveUsers(json));
 	    };
-	}
+	};
 
 	function shouldFetchUsers(state) {
 	    if (!state.users) {
@@ -36808,6 +36810,7 @@
 	        return state.users.stale;
 	    }
 	}
+
 	function fetchUsersIfNeeded() {
 	    return function (dispatch, getState) {
 	        if (shouldFetchUsers(getState())) {
@@ -36817,6 +36820,7 @@
 	        }
 	    };
 	}
+
 	// reducers
 
 	var initialDataState = {
@@ -36864,23 +36868,21 @@
 
 	    switch (action.type) {
 	        case MODE_SET:
-	            {
-	                switch (action.mode) {
-	                    case MODE_CREATE:
-	                        return Object.assign({}, state, {
-	                            create_visible: true,
-	                            list_visible: false,
-	                            toolbox_visible: false
-	                        });
-	                    case MODE_READ:
-	                        return Object.assign({}, state, {
-	                            create_visible: false,
-	                            list_visible: true,
-	                            toolbox_visible: true
-	                        });
-	                    default:
-	                        return state;
-	                }
+	            switch (action.mode) {
+	                case MODE_CREATE:
+	                    return Object.assign({}, state, {
+	                        create_visible: true,
+	                        list_visible: false,
+	                        toolbox_visible: false
+	                    });
+	                case MODE_READ:
+	                    return Object.assign({}, state, {
+	                        create_visible: false,
+	                        list_visible: true,
+	                        toolbox_visible: true
+	                    });
+	                default:
+	                    return state;
 	            }
 	        default:
 	            return state;
@@ -39080,7 +39082,7 @@
 	                        _react2.default.createElement(
 	                            _reactBootstrap.NavItem,
 	                            null,
-	                            'Admin'
+	                            'Administration'
 	                        )
 	                    )
 	                ),
@@ -39091,14 +39093,22 @@
 	                        _reactBootstrap.NavDropdown,
 	                        { title: props.username, id: 'basic-nav-dropdown' },
 	                        _react2.default.createElement(
-	                            _reactBootstrap.MenuItem,
-	                            null,
-	                            'Account'
+	                            _reactRouterBootstrap.LinkContainer,
+	                            { to: '/admin/account' },
+	                            _react2.default.createElement(
+	                                _reactBootstrap.NavItem,
+	                                null,
+	                                'Account'
+	                            )
 	                        ),
 	                        _react2.default.createElement(
-	                            _reactBootstrap.MenuItem,
-	                            null,
-	                            'Settings'
+	                            _reactRouterBootstrap.LinkContainer,
+	                            { to: '/admin/settings' },
+	                            _react2.default.createElement(
+	                                _reactBootstrap.NavItem,
+	                                null,
+	                                'Settings'
+	                            )
 	                        ),
 	                        _react2.default.createElement(
 	                            _reactBootstrap.MenuItem,
@@ -58234,17 +58244,12 @@
 
 	var _header2 = _interopRequireDefault(_header);
 
-	var _invoicemenu = __webpack_require__(918);
-
-	var _invoicemenu2 = _interopRequireDefault(_invoicemenu);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Invoices = function Invoices() {
 	    return _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(_invoicemenu2.default, null),
 	        _react2.default.createElement(_header2.default, { heading: 'Invoices', subheading: 'Your invoices.' })
 	    );
 	};
@@ -58253,62 +58258,6 @@
 
 /***/ },
 /* 918 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _react = __webpack_require__(368);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(400);
-
-	var _reactRouter = __webpack_require__(538);
-
-	var _reactRouterBootstrap = __webpack_require__(659);
-
-	var _reactBootstrap = __webpack_require__(662);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var InvoiceMenu = function InvoiceMenu(props) {
-	    return _react2.default.createElement(
-	        _reactBootstrap.Nav,
-	        { bsStyle: 'pills' },
-	        _react2.default.createElement(
-	            _reactRouterBootstrap.LinkContainer,
-	            { to: '/invoices' },
-	            _react2.default.createElement(
-	                _reactBootstrap.NavItem,
-	                null,
-	                'Invoices'
-	            )
-	        ),
-	        _react2.default.createElement(
-	            _reactRouterBootstrap.LinkContainer,
-	            { to: '/invoices/recurring' },
-	            _react2.default.createElement(
-	                _reactBootstrap.NavItem,
-	                null,
-	                'Recurring'
-	            )
-	        ),
-	        _react2.default.createElement(
-	            _reactRouterBootstrap.LinkContainer,
-	            { to: '/invoices/received' },
-	            _react2.default.createElement(
-	                _reactBootstrap.NavItem,
-	                null,
-	                'Received'
-	            )
-	        )
-	    );
-	};
-
-	module.exports = InvoiceMenu;
-
-/***/ },
-/* 919 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58325,7 +58274,7 @@
 
 	var _header2 = _interopRequireDefault(_header);
 
-	var _adminmenu = __webpack_require__(920);
+	var _adminmenu = __webpack_require__(919);
 
 	var _adminmenu2 = _interopRequireDefault(_adminmenu);
 
@@ -58345,7 +58294,7 @@
 	exports.default = Admin;
 
 /***/ },
-/* 920 */
+/* 919 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58401,7 +58350,7 @@
 	module.exports = AdminMenu;
 
 /***/ },
-/* 921 */
+/* 920 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58424,15 +58373,15 @@
 
 	var _header2 = _interopRequireDefault(_header);
 
-	var _create = __webpack_require__(922);
+	var _create = __webpack_require__(921);
 
 	var _create2 = _interopRequireDefault(_create);
 
-	var _list = __webpack_require__(923);
+	var _list = __webpack_require__(922);
 
 	var _list2 = _interopRequireDefault(_list);
 
-	var _toolbox = __webpack_require__(924);
+	var _toolbox = __webpack_require__(923);
 
 	var _toolbox2 = _interopRequireDefault(_toolbox);
 
@@ -58491,7 +58440,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Users);
 
 /***/ },
-/* 922 */
+/* 921 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58576,7 +58525,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Create);
 
 /***/ },
-/* 923 */
+/* 922 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58591,7 +58540,7 @@
 
 	var _reactRedux = __webpack_require__(601);
 
-	var _toolbox = __webpack_require__(924);
+	var _toolbox = __webpack_require__(923);
 
 	var _toolbox2 = _interopRequireDefault(_toolbox);
 
@@ -58659,11 +58608,11 @@
 	                users.map(function (user) {
 	                    return _react2.default.createElement(
 	                        'tr',
-	                        null,
+	                        { key: user.id },
 	                        _react2.default.createElement(
 	                            'td',
 	                            null,
-	                            _react2.default.createElement('input', { type: 'checkbox', 'data-id': user.id })
+	                            _react2.default.createElement('input', { type: 'checkbox' })
 	                        ),
 	                        _react2.default.createElement(
 	                            'td',
@@ -58717,7 +58666,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(List);
 
 /***/ },
-/* 924 */
+/* 923 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58794,7 +58743,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Toolbox);
 
 /***/ },
-/* 925 */
+/* 924 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58822,7 +58771,7 @@
 	exports.default = User;
 
 /***/ },
-/* 926 */
+/* 925 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58865,7 +58814,7 @@
 	exports.default = Account;
 
 /***/ },
-/* 927 */
+/* 926 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58908,7 +58857,7 @@
 	exports.default = Settings;
 
 /***/ },
-/* 928 */
+/* 927 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58938,7 +58887,7 @@
 	exports.default = Expenses;
 
 /***/ },
-/* 929 */
+/* 928 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58968,7 +58917,7 @@
 	exports.default = Timesheets;
 
 /***/ },
-/* 930 */
+/* 929 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
