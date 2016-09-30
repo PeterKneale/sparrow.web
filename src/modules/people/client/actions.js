@@ -1,14 +1,12 @@
 // action types
-export const SET_VISIBILITY = 'SET_VISIBILITY'
-export const CREATE_COMPONENT = "CREATE_COMPONENT"
-export const LIST_COMPONENT = "LIST_COMPONENT"
-export const TOOLBOX_COMPONENT = "TOOLBOX_COMPONENT"
+export const MODE_SET = 'MODE_SET'
+export const MODE_CREATE = 'MODE_CREATE'
+export const MODE_READ = 'MODE_READ'
 
 // Action Methods
-export const setVisibility = (item, visible) => ({
-    type: SET_VISIBILITY,
-    item: item,
-    visible: visible
+export const setMode = (mode) => ({
+    type: MODE_SET,
+    mode: mode
 });
 
 const initialState = {
@@ -20,20 +18,20 @@ const initialState = {
 // reducer
 export function clientReducer(state = initialState, action) {
     switch (action.type) {
-        case SET_VISIBILITY:
+        case MODE_SET:
             {
-                switch (action.item) {
-                    case CREATE_COMPONENT:
+                switch (action.mode) {
+                    case MODE_CREATE:
                         return Object.assign({}, state, {
-                            create_visible: action.visible
+                            create_visible: true,
+                            list_visible: false,
+                            toolbox_visible: false
                         });
-                    case LIST_COMPONENT:
+                    case MODE_READ:
                         return Object.assign({}, state, {
-                            list_visible: action.visible
-                        });
-                    case TOOLBOX_COMPONENT:
-                        return Object.assign({}, state, {
-                            toolbox_visible: action.visible
+                            create_visible: false,
+                            list_visible: true,
+                            toolbox_visible: true
                         });
                     default:
                         return state;

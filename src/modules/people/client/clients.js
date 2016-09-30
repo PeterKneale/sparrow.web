@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react'
 import { connect } from 'react-redux'
 import { Checkbox, ButtonToolbar, ButtonGroup, Button, Glyphicon } from 'react-bootstrap';
-import { setVisibility, CREATE_COMPONENT, LIST_COMPONENT, TOOLBOX_COMPONENT } from "./actions"
+import { setMode, MODE_SET  , MODE_CREATE, MODE_READ } from "./actions"
 import Header from '../../../components/header';
 import Create from './create';
 import List from './list';
@@ -29,21 +29,9 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    onCreate: () => {
-        dispatch(setVisibility(CREATE_COMPONENT, true))
-        dispatch(setVisibility(LIST_COMPONENT, false))
-        dispatch(setVisibility(TOOLBOX_COMPONENT, false))
-    },
-    onSave: () => {
-        dispatch(setVisibility(CREATE_COMPONENT,false))
-        dispatch(setVisibility(LIST_COMPONENT, true))
-        dispatch(setVisibility(TOOLBOX_COMPONENT, true))
-    },
-    onCancel: () => {
-        dispatch(setVisibility(CREATE_COMPONENT,false))
-        dispatch(setVisibility(LIST_COMPONENT, true))
-        dispatch(setVisibility(TOOLBOX_COMPONENT, true))
-    }
+    onCreate: () => {dispatch(setMode(MODE_CREATE))},
+    onSave: () => {dispatch(setMode(MODE_READ))},
+    onCancel: () => {dispatch(setMode(MODE_READ))}
 });
 
 export default connect(
