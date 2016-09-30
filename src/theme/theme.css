@@ -2,3 +2,11 @@ body {
   padding-top: 20px;
   padding-bottom: 20px;
 }
+
+div.spinner {
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  height: 65px;
+  text-align: center;
+}
