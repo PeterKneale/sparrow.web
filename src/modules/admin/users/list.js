@@ -1,13 +1,13 @@
 import React, {PropTypes} from 'react';
 import { connect } from 'react-redux'
+import { Panel } from 'react-bootstrap';
+
 import Toolbox from './toolbox';
 const List = ({users, visible, error_visible, error_message,  onDelete, onArchive, onEmail}) => {
     return (
     <div>
         {error_visible ?
-            <div>
-                There was an error: {error_message}
-            </div>
+            <Panel header="Error" bsStyle="danger">{error_message}</Panel>
             :
             <div className="panel panel-default" hidden={!visible}>
                 <div className="panel-heading">
