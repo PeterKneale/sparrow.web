@@ -12,50 +12,48 @@ export const RECEIVE_USERS = 'RECEIVE_USERS'
 export const setMode = (mode) => ({
     type: MODE_SET,
     mode: mode
-});
-export function invalidateUsers() {
-    return {
-        type: INVALIDATE_USERS
-    }
-}
-export function requestUsers() {
-    return {
-        type: REQUEST_USERS
-    }
-}
-export function receiveUsers(json) {
-    return {
+})
+export const invalidateUsers = () => ({
+    type: INVALIDATE_USERS
+})
+
+export const requestUsers = () => ({
+    type: REQUEST_USERS
+})
+
+export const receiveUsers = (json) => ({
         type: RECEIVE_USERS,
         users: json.map(user => user),
         receivedAt: Date.now()
-    }
-}   
+})
+
 export function fetchUsers() {
-  return (dispatch) => {
-    dispatch(requestUsers())
-    return fetch(`http://localhost/users`)
-      .then(response => response.json())
-      .then(json => dispatch(receiveUsers(json)))
-  }
+    return (dispatch) => {
+        dispatch(requestUsers())
+        return fetch(`http://localhost/users`)
+            .then(response => response.json())
+            .then(json => dispatch(receiveUsers(json)))
+    }
 }
 
 function shouldFetchUsers(state) {
-  if (!state.users) {
-    return true
-  } else if (state.loading) {
-    return false
-  } else {
-    return state.users.stale
-  }
-}
-export function fetchUsersIfNeeded() {
-  return (dispatch, getState) => {
-    if (shouldFetchUsers(getState())) {
-      return dispatch(fetchUsers())
+    if (!state.users) {
+        return true
+    } else if (state.loading) {
+        return false
     } else {
-      return Promise.resolve()
+        return state.users.stale
     }
-  }
+}
+
+export function fetchUsersIfNeeded() {
+    return (dispatch, getState) => {
+        if (shouldFetchUsers(getState())) {
+            return dispatch(fetchUsers())
+        } else {
+            return Promise.resolve()
+        }
+    }
 }
 // reducers
 
