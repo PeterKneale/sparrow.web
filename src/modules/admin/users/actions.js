@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch'
+import Constants from 'constants'
 
 // action types
 export const MODE_SET = 'MODE_SET'
@@ -17,7 +18,6 @@ export const setMode = (mode) => ({
 export const invalidateUsers = () => ({
     type: INVALIDATE_USERS
 })
-
 export const requestUsers = () => ({
     type: REQUEST_USERS
 })
@@ -34,7 +34,7 @@ export const receiveUsers = (json) => ({
 export function fetchUsers() {
     return (dispatch) => {
         dispatch(requestUsers())
-        return fetch(`http://localhost/users`)
+        return fetch('/api/users')
             .then(response => response.json())
             .then(json => dispatch(receiveUsers(json)))
             .catch(e=>dispatch(requestUsersFail("Unable to load users at this time.")));

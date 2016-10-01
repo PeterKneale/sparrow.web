@@ -40,9 +40,9 @@ module.exports = {
                     require.resolve('sass-loader') + '?sourceMap'
                 ],
             }, {
-                test: /\.less$/, 
+                test: /\.less$/,
                 loader: 'style!css!less'
-            }, 
+            },
             {
                 test: /\.json$/,
                 loader: 'json-loader',
@@ -64,11 +64,17 @@ module.exports = {
     },
 
     devServer: {
-        port: 8080,
+        port: 80,
         host: '0.0.0.0',
         progress: true,
         contentBase: './build',
         publicPath: '/',
-        stats: { colors: true }
+        stats: { colors: true },
+        proxy: {
+            '/api': {
+                target: 'http://localhost:81',
+                secure: false
+            }
+        }
     }
 };
