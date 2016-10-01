@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux'
-import { userReducer } from './modules/admin/users/actions'
+import { userManagementReducer } from './modules/admin/users/actions'
 
 const rootReducer = combineReducers({
-  users: userReducer
+  usermanagement: userManagementReducer
 });
 
 export default rootReducer

@@ -31,7 +31,7 @@ Create.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        create_visible: state.users.create_visible
+        create_visible: state.usermanagement.create_visible
     }
 }
 
