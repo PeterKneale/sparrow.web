@@ -170,6 +170,7 @@ function doDeleteUser(id) {
 
 const initialState = {
     users: [],
+    creating: false,
     loading: false,
     list_visible: true,
     create_visible: false,
@@ -186,14 +187,16 @@ export function userManagementReducer(state = initialState, action) {
                 ...state, 
                 creating: true
             }
+            
         case RESPONSE_CREATE_USER:
             console.log('Ready to transition to user ' + action.id)
             return state
+
         case REQUEST_DELETE_USER:
             return { 
                 ...state, 
-                users : state.users.map((user) => { return  { ...user, deleting: user.id === action.id }
-            })}
+                users : state.users.map((user) => { return  { ...user, deleting: user.id === action.id } })
+            }
 
         case RESPONSE_DELETE_USER:
             return { 
@@ -212,7 +215,7 @@ export function userManagementReducer(state = initialState, action) {
                 ...state,
                 loading: false,
                 list_visible: true,
-                users: action.users.map((user) => { return { ...user, deleting: false, deleted: false } })
+                users: action.users.map((user) => { return { ...user, deleting: false, updating: false } })
             }
 
         case MODE_SET:

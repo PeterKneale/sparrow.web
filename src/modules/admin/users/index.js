@@ -9,12 +9,12 @@ import Toolbox from './toolbox';
 import Spinner from '../../../components/spinner';
 import Error from '../../../components/error';
 
-const Users = ({onCreate, onSave, onCancel, loading, error_visible, error_message}) => {
+const Users = ({onCreate, loading, error_visible, error_message}) => {
     return (
         <div>
             <Button bsStyle="primary" bsSize="large" className="pull-right" onClick={() => onCreate() }><Glyphicon glyph="plus" /> Create User</Button>
             <Header heading="Users" subheading="Add new users and manage existing ones..." />
-            <Create onSave={() => onSave() } onCancel={() => onCancel() } />
+            <Create />
             <Spinner visible={loading}/>
             <List />
             <Error message={error_message} visible={error_visible}/>
@@ -23,8 +23,6 @@ const Users = ({onCreate, onSave, onCancel, loading, error_visible, error_messag
 }
 
 Users.propTypes = {
-    onCreate: PropTypes.func,
-    onSave: PropTypes.func,
     onCancel: PropTypes.func,
 
     loading: PropTypes.bool,
@@ -43,8 +41,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
     onCreate: () => {dispatch(setMode(MODE_CREATE))},
-    onSave: () => {dispatch(setMode(MODE_READ))},
-    onCancel: () => {dispatch(setMode(MODE_READ))}
 });
 
 export default connect(
