@@ -4,7 +4,7 @@ import {Title, AdminMenu} from '../../components';
 const Dashboard = (props) => {
     return (
         <div>
-            <Title heading="Administration" subheading="Administration area"/>
+            <Title title="Administration" subtitle="Administration area"/>
         </div>
     )
 }

@@ -1,13 +1,16 @@
 import React, {PropTypes} from 'react'
 import { Jumbotron  } from 'react-bootstrap';
 
-function Jumbo (props)  {
-    return (
-       <Jumbotron>
-            <h1>{props.heading}</h1>
-            <p>{props.body}</p>
-        </Jumbotron>
-    );
+const Jumbo = ({heading, body}) => (
+    <Jumbotron>
+        <h1>{heading}</h1>
+        <p>{body}</p>
+    </Jumbotron>
+);
+
+Jumbo.propTypes = {
+    heading : PropTypes.string,
+    body : PropTypes.string
 };
 
 export default Jumbo;

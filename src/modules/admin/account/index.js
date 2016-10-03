@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap';
 
 const Account = () => (
     <div>
-        <Title heading="Account" subheading="Your account"/>
+        <Title title="Account" subtitle="Your account"/>
         <div className="panel panel-default">
             <div className="panel-heading">Account</div>
         </div>

@@ -4,7 +4,7 @@ import {Title} from '../../components';
 const Invoices = () => {
     return (
         <div>
-            <Title heading="Invoices" subheading="Your invoices."/>
+            <Title title="Invoices" subtitle="Your invoices."/>
         </div>
     )
 }

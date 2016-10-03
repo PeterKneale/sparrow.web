@@ -3,7 +3,7 @@ import {Title} from '../../../components';
 
 const User = () => {
     return (
-        <Title heading="User" subheading="Your user."/>
+        <Title title="User" subtitle="Your user."/>
     )
 }
 

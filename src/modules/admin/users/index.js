@@ -11,7 +11,7 @@ const Users = ({onCreate, loading, error_visible, error_message}) => {
     return (
         <div>
             <Button bsStyle="primary" bsSize="large" className="pull-right" onClick={() => onCreate() }><Glyphicon glyph="plus" /> Create User</Button>
-            <Title heading="Users" subheading="Add new users and manage existing ones..." />
+            <Title title="Users" subtitle="Add new users and manage existing ones..." />
             <Create />
             <Spinner visible={loading}/>
             <List />

@@ -4,7 +4,7 @@ import {Title} from '../../components';
 const Reporting = () => {
     return (
         <div>
-            <Title heading="Reporting" subheading="Your reports."/>
+            <Title title="Reporting" subtitle="Your reports."/>
         </div>
     )
 }
