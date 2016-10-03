@@ -5,8 +5,8 @@ import { Panel, Button, Glyphicon } from 'react-bootstrap';
 import { invalidateUsers, listUsers, deleteUser } from "./actions"
 import Toolbox from './toolbox'
 
-const List = ({onDelete, onDeleteMany, onRefresh, users, list_visible}) => (
-    list_visible ?
+const List = ({onDelete, onDeleteMany, onRefresh, users, list_visible, loading}) => (
+    list_visible && !loading ?
         users.length > 0 ? 
         <div className="panel panel-default">
             <div className="panel-heading">
@@ -56,10 +56,12 @@ List.propTypes = {
 
     users: PropTypes.array,
     list_visible: PropTypes.bool,
+    loading: PropTypes.bool
 }
 
 const mapStateToProps = (state) => {
     return {
+        loading: state.usermanagement.loading,
         users: state.usermanagement.users,
         list_visible: state.usermanagement.list_visible,
     }

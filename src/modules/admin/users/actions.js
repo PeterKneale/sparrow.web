@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch'
 import Constants from 'constants'
+import { hashHistory } from 'react-router'
 
 // MODE
 export const MODE_SET = 'MODE_SET'
@@ -9,6 +10,26 @@ export const MODE_READ = 'MODE_READ'
 export const setMode = (mode) => ({
     type: MODE_SET,
     mode: mode
+})
+
+// CREATE
+export const REQUEST_CREATE_USER = 'REQUEST_CREATE_USER'
+export const REQUEST_CREATE_USER_FAIL = 'REQUEST_CREATE_USER_FAIL'
+export const RESPONSE_CREATE_USER = 'RESPONSE_CREATE_USER'
+
+export const requestCreateUser = (first_name, last_name) => ({
+    type: REQUEST_CREATE_USER,
+    first_name: first_name,
+    last_name: last_name
+})
+export const requestCreateUserFail = (message, exception) => ({
+    type: REQUEST_CREATE_USER_FAIL,
+    message: message,
+    exception : exception
+})
+export const responseCreateUser = (id) => ({
+    type: RESPONSE_CREATE_USER,
+    id: id
 })
 
 // LIST
@@ -46,6 +67,24 @@ export const responseDeleteUser = (id) => ({
     id: id
 })
 
+// GET
+export const REQUEST_GET_USER = 'REQUEST_GET_USER'
+export const REQUEST_GET_USER_FAIL = 'REQUEST_GET_USER_FAIL'
+export const RESPONSE_GET_USER = 'RESPONSE_GET_USER'
+
+export const requestGetUser = (id) => ({
+    type: REQUEST_GET_USER,
+    id: id
+})
+export const requestGetUserFail = (message) => ({
+    type: REQUEST_GET_USER_FAIL,
+    message: message
+})
+export const responseGetUser = (json) => ({
+    type: RESPONSE_GET_USER,
+    user: json
+})
+
 // OTHER
 export const INVALIDATE_USERS = 'INVALIDATE_USERS'
 
@@ -65,7 +104,19 @@ export function listUsers() {
     }
   }
 }
-
+export function createUser(first_name, last_name) {
+  return (dispatch, getState) => {
+    let state = getState()
+    if (!state.creating) { 
+        return dispatch(doCreateUser(first_name, last_name))
+    }
+  }
+}
+export function getUser(id) {
+  return (dispatch, getState) => {
+    return dispatch(doGetUser(id)) // TODO: Check for user deleting already?
+  }
+}
 export function deleteUser(id) {
   return (dispatch, getState) => {
     return dispatch(doDeleteUser(id)) // TODO: Check for user deleting already?
@@ -83,6 +134,28 @@ function doListUsers() {
     }
 }
 
+function doGetUsers() {
+    return (dispatch) => {
+        dispatch(requestGetUser(id))
+        return fetch('/api/users' + id)
+            .then(checkStatus)
+            .then(response => response.json())
+            .then(json => dispatch(responseGetUser(json)))
+            .catch(e => dispatch(requestGetUserFail("Unable to list users.")));
+    }
+}
+function doCreateUser(first_name, last_name) {
+    return (dispatch) => {
+        dispatch(requestCreateUser())
+        return fetch('/api/users', {method:'post', body: JSON.stringify({first_name:first_name, last_name: last_name})})
+            .then(checkStatus)
+            .then(response => {
+                let id = response.headers.get('location').split('/').pop()
+                hashHistory.push('/admin/users/'+ id)
+            })
+            .catch(e => dispatch(requestCreateUserFail("Unable to create user.", e)));
+    }
+}
 function doDeleteUser(id) {
     return (dispatch) => {
         dispatch(requestDeleteUser(id))
@@ -108,55 +181,70 @@ const initialState = {
 
 export function userManagementReducer(state = initialState, action) {
     switch (action.type) {
+        case REQUEST_CREATE_USER:
+            return { 
+                ...state, 
+                creating: true
+            }
+        case RESPONSE_CREATE_USER:
+            console.log('Ready to transition to user ' + action.id)
+            return state
         case REQUEST_DELETE_USER:
-            var users = state.users.map((user) => {                
-                if (user.id === action.id)  
-                    { return  { ...user, deleting: true } }  
-                else 
-                    { return { ...user } }
-            });
-            return { ...state, users:users }
+            return { 
+                ...state, 
+                users : state.users.map((user) => { return  { ...user, deleting: user.id === action.id }
+            })}
 
         case RESPONSE_DELETE_USER:
-            var users = state.users.filter(function(user)  {                
-                return user.id != action.id
-            });
-            return { ...state, users:users }
+            return { 
+                ...state, 
+                users : state.users.filter(function(user) { return user.id != action.id } ) 
+            }
+
         case REQUEST_LIST_USERS:
-            return Object.assign({}, state, {
-                loading: true
-            })
+            return { 
+                ...state, 
+                loading : true 
+            }
+
         case RESPONSE_LIST_USERS:
-            return Object.assign({}, state, {
+            return { 
+                ...state,
                 loading: false,
                 list_visible: true,
-                users: action.users.map((user) => { return { ...user, deleting:false, deleted:false } })
-            })
+                users: action.users.map((user) => { return { ...user, deleting: false, deleted: false } })
+            }
 
         case MODE_SET:
             switch (action.mode) {
                 case MODE_CREATE:
-                    return Object.assign({}, state, {
+                    return { 
+                        ...state,
                         create_visible: true,
                         list_visible: false
-                    });
+                    };
                 case MODE_READ:
-                    return Object.assign({}, state, {
+                    return { 
+                        ...state,
                         create_visible: false,
                         list_visible: true
-                    });
-            }
-
+                    };
+            } 
+        case REQUEST_CREATE_USER_FAIL:
+        case REQUEST_GET_USER_FAIL:
         case REQUEST_DELETE_USER_FAIL:
         case REQUEST_LIST_USERS_FAIL:
-            return Object.assign({}, state, {
+            console.log(action.exception)
+            return { 
+                ...state,
                 loading: false,
                 list_visible: false,
                 users: null,
                 error_visible: true,
                 error_message: action.message,
                 create_visible: false
-            });
+            };
+
         default:
             return state
     }
@@ -173,3 +261,4 @@ function checkStatus(response) {
     throw error
   }
 }
+

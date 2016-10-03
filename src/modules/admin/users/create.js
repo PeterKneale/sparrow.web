@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react'
 import { connect } from 'react-redux'
 import { PanelBody, Form, FormGroup, ControlLabel, FormControl, Button, Glyphicon } from 'react-bootstrap';
+import { createUser, setMode, MODE_READ } from "./actions"
 
 const Create = ({create_visible, onCancel, onSave}) => {
     return (
@@ -16,11 +17,11 @@ const Create = ({create_visible, onCancel, onSave}) => {
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Last Name</ControlLabel>
-                        <FormControl type="text" placeholder="Smith" />
+                        <FormControl type="text" placeholder="Smith"/>
                     </FormGroup>
 
                     <p className="pull-right">
-                        <Button onClick={() => onCancel() } ><Glyphicon glyph="remove" /> Cancel</Button>
+                        <Button onClick={() => onCancel() }><Glyphicon glyph="remove" /> Cancel</Button>
                         {' '}
                         <Button onClick={() => onSave() } bsStyle="primary"><Glyphicon glyph="floppy-disk" /> Save</Button>
                     </p>
@@ -41,7 +42,13 @@ const mapStateToProps = (state) => {
     }
 }
 
+const mapDispatchToProps = (dispatch) => ({
+    onSave: () => {dispatch(createUser('peter', 'kneale'))},
+    onCancel: () => {dispatch(setMode(MODE_READ))}
+});
+
 export default connect(
-    mapStateToProps
+    mapStateToProps,
+    mapDispatchToProps
 )(Create)
 
