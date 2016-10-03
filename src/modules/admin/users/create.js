@@ -5,8 +5,6 @@ import { createUser, setMode, MODE_READ } from "./actions"
 
 const Create = ({create_visible, creating, onCancel, onSave}) => (
     
-
-
 create_visible ? 
     <div className="panel panel-default">
         <div className="panel-heading">
@@ -59,4 +57,3 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(Create)
-

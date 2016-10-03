@@ -1,10 +1,10 @@
 import React from 'react'
-import Header from '../../components/header';
+import {Title} from '../../components';
 
 const Invoices = () => {
     return (
         <div>
-            <Header heading="Invoices" subheading="Your invoices."/>
+            <Title heading="Invoices" subheading="Your invoices."/>
         </div>
     )
 }

@@ -1,11 +1,10 @@
 import React from 'react'
-import Header from '../../components/header';
-import AdminMenu from '../../components/menu/adminmenu';
+import {Title, MenuAdmin} from '../../components';
 
 const Admin = (props) => {
     return (
         <div>
-            <AdminMenu/>
+            <MenuAdmin/>
             {props.children}
         </div>
     )

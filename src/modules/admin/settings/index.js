@@ -1,10 +1,10 @@
 import React from 'react'
-import Header from '../../../components/header';
+import {Title} from '../../../components';
 import { Button } from 'react-bootstrap';
 
 const Settings = () => (
     <div>
-        <Header heading="Settings" subheading="Your settings."/>
+        <Title heading="Settings" subheading="Your settings."/>
         <div className="panel panel-default">
             <div className="panel-heading">Settings</div>
         </div>

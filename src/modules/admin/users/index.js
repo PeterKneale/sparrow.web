@@ -2,18 +2,16 @@ import React, {PropTypes} from 'react'
 import { connect } from 'react-redux'
 import { Checkbox, ButtonToolbar, ButtonGroup, Button, Glyphicon } from 'react-bootstrap';
 import { setMode, MODE_SET, MODE_CREATE, MODE_READ } from "./actions"
-import Header from '../../../components/header';
+import { Error, Title, Spinner } from '../../../components';
 import Create from './create';
 import List from './list';
 import Toolbox from './toolbox';
-import Spinner from '../../../components/spinner';
-import Error from '../../../components/error';
 
 const Users = ({onCreate, loading, error_visible, error_message}) => {
     return (
         <div>
             <Button bsStyle="primary" bsSize="large" className="pull-right" onClick={() => onCreate() }><Glyphicon glyph="plus" /> Create User</Button>
-            <Header heading="Users" subheading="Add new users and manage existing ones..." />
+            <Title heading="Users" subheading="Add new users and manage existing ones..." />
             <Create />
             <Spinner visible={loading}/>
             <List />

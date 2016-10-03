@@ -1,11 +1,10 @@
 import React from 'react'
-import Header from '../../components/header';
-import AdminMenu from '../../components/menu/adminmenu';
+import {Title, AdminMenu} from '../../components';
 
 const Dashboard = (props) => {
     return (
         <div>
-            <Header heading="Administration" subheading="Administration area"/>
+            <Title heading="Administration" subheading="Administration area"/>
         </div>
     )
 }
