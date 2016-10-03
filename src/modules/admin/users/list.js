@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import { Panel } from 'react-bootstrap';
 import Toolbox from './toolbox';
 import { invalidateUsers, fetchUsers } from "./actions"
-
+import { LinkContainer } from 'react-router-bootstrap';
+import { Button } from 'react-bootstrap';
 
 const List = ({onDelete, onArchive, onEmail, onRefresh, users, list_visible}) => {
     return (
@@ -14,7 +15,7 @@ const List = ({onDelete, onArchive, onEmail, onRefresh, users, list_visible}) =>
                         <Toolbox onDelete={() => onDelete() } onArchive={() => onArchive() } onEmail={() => onEmail() }  onRefresh={() => onRefresh() } />
                     </div>
                     <table className="table">
-                        <thead><tr><th>Select</th><th>First Name</th><th>Last Name</th><th>Username</th></tr></thead>
+                        <thead><tr><th>Select</th><th>First Name</th><th>Last Name</th><th>Username</th><th>Actions</th></tr></thead>
                         <tbody>
                             { users.map(function (user) {
                                 return <tr key={user.id}>
@@ -22,13 +23,19 @@ const List = ({onDelete, onArchive, onEmail, onRefresh, users, list_visible}) =>
                                     <td>{user.first_name}</td>
                                     <td>{user.last_name}</td>
                                     <td>{user.name}</td>
+                                    <td>
+                                    <LinkContainer to={{ pathname: '/admin/users/' + user.id }}>
+                                        <Button>Edit</Button>
+                                    </LinkContainer>
+                                    </td>
                                 </tr>
                             }) }
                         </tbody>
                     </table>
                 </div>
                 :
-                null}
+                null
+            }
 
         </div>
     );
@@ -55,10 +62,10 @@ const mapDispatchToProps = (dispatch) => ({
     onDelete: () => { },
     onArchive: () => { },
     onEmail: () => { },
-    onRefresh: () => { 
+    onRefresh: () => {
         dispatch(dispatch(invalidateUsers()))
         dispatch(dispatch(fetchUsers()))
-        }
+    }
 });
 export default connect(
     mapStateToProps,

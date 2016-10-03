@@ -36,12 +36,12 @@ ReactDOM.render(
 
                 <Route path="/invoices" component={Invoices}/>
                 
+                <Route path="/admin/users/:id" component={User}/>
+                <Route path="/admin/users" component={Users}/>
+                <Route path="/admin/account" component={Account}/>
+                <Route path="/admin/settings" component={Settings}/>
                 <Route path="/admin" component={Admin}>
-                    <Route path="/admin/users" component={Users}>
-                        <Route path="/admin/users/:id" component={Users}/>
-                    </Route>
-                    <Route path="/admin/account" component={Account}/>
-                    <Route path="/admin/settings" component={Settings}/>
+                    
                 </Route>
                 
                 <Route path="/expenses" component={Expenses}/>

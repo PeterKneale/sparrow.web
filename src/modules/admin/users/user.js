@@ -3,7 +3,7 @@ import Header from '../../../components/header';
 
 const User = () => {
     return (
-        <Header heading="People - Client - x" subheading="Your client."/>
+        <Header heading="User" subheading="Your user."/>
     )
 }
 
