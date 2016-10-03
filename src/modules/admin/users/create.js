@@ -6,19 +6,25 @@ const Create = ({create_visible, onCancel, onSave}) => {
     return (
         <div className="panel panel-default" hidden={!create_visible}>
             <div className="panel-heading">
-                Create a new client
+                Create a new user
             </div>
             <div className="panel-body">
-                <Form inline>
+                <Form>
                     <FormGroup>
-                        <ControlLabel>Client Name</ControlLabel>
-                        {' '}
-                        <FormControl type="text" placeholder="ACME Industry Pty Ltd" />
+                        <ControlLabel>First Name</ControlLabel>
+                        <FormControl type="text" placeholder="John" />
                     </FormGroup>
-                    {' '}
-                    <Button className="pull-right" onClick={() => onSave() } bsStyle="primary"><Glyphicon glyph="floppy-disk" /> Save</Button>
-                    {' '}
-                    <Button className="pull-right" onClick={() => onCancel() } ><Glyphicon glyph="remove" /> Cancel</Button>
+                    <FormGroup>
+                        <ControlLabel>Last Name</ControlLabel>
+                        <FormControl type="text" placeholder="Smith" />
+                    </FormGroup>
+
+                    <p className="pull-right">
+                        <Button onClick={() => onCancel() } ><Glyphicon glyph="remove" /> Cancel</Button>
+                        {' '}
+                        <Button onClick={() => onSave() } bsStyle="primary"><Glyphicon glyph="floppy-disk" /> Save</Button>
+                    </p>
+
                 </Form>
             </div>
         </div>
