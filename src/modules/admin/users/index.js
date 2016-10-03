@@ -17,16 +17,13 @@ const Users = ({onCreate, loading, error_visible, error_message}) => {
             <Create />
             <Spinner visible={loading}/>
             <List />
-            <Error message={error_message} visible={error_visible}/>
+            <Error visible={error_visible} message={error_message}/>
         </div>
     )
 }
 
 Users.propTypes = {
-    onCancel: PropTypes.func,
-
     loading: PropTypes.bool,
-
     error_visible: PropTypes.bool,
     error_message: PropTypes.string
 }

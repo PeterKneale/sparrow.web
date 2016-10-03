@@ -144,6 +144,8 @@ function doGetUsers() {
             .catch(e => dispatch(requestGetUserFail("Unable to list users.")));
     }
 }
+
+responseCreateUser
 function doCreateUser(first_name, last_name) {
     return (dispatch) => {
         dispatch(requestCreateUser())
@@ -151,6 +153,7 @@ function doCreateUser(first_name, last_name) {
             .then(checkStatus)
             .then(response => {
                 let id = response.headers.get('location').split('/').pop()
+                dispatch(responseCreateUser(id))
                 hashHistory.push('/admin/user/'+ id)
             })
             .catch(e => dispatch(requestCreateUserFail("Unable to create user.", e)));
@@ -189,8 +192,12 @@ export function userManagementReducer(state = initialState, action) {
             }
             
         case RESPONSE_CREATE_USER:
-            console.log('Ready to transition to user ' + action.id)
-            return state
+            return { 
+                ...state, 
+                creating: false,
+                create_visible: false,
+                list_visible: true
+            }
 
         case REQUEST_DELETE_USER:
             return { 
