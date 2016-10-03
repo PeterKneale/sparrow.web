@@ -151,7 +151,7 @@ function doCreateUser(first_name, last_name) {
             .then(checkStatus)
             .then(response => {
                 let id = response.headers.get('location').split('/').pop()
-                hashHistory.push('/admin/users/'+ id)
+                hashHistory.push('/admin/user/'+ id)
             })
             .catch(e => dispatch(requestCreateUserFail("Unable to create user.", e)));
     }

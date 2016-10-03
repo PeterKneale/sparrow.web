@@ -36,7 +36,7 @@ const renderUsers = (users, onDelete) => (
 const renderUser = (user, onDelete) => (
     <div className="list-group-item" key={user.id}>
          <div className="pull-right"><Button bsSize="small" bsStyle="danger" onClick={() => onDelete(user.id)}><Glyphicon glyph="trash"/> Delete</Button></div>
-         <Link to={`/admin/users/${user.id}`}>
+         <Link to={`/admin/user/${user.id}`}>
             <h4 className="list-group-item-heading">{user.name}</h4>
         </Link>
         <p className="list-group-item-text">{user.first_name} {user.last_name}</p>

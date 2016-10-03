@@ -7,10 +7,10 @@ import { Nav, NavItem } from 'react-bootstrap';
 const AdminMenu = function (props) {
     return <Nav bsStyle="tabs">
         <LinkContainer to="/admin/users">
-            <NavItem>User Management</NavItem>
+            <NavItem>Users</NavItem>
         </LinkContainer>
         <LinkContainer to="/admin/account">
-            <NavItem>Account Management</NavItem>
+            <NavItem>Account</NavItem>
         </LinkContainer>
         <LinkContainer to="/admin/settings">
             <NavItem>Settings</NavItem>

@@ -1,7 +1,7 @@
 import 'babel-polyfill'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Router, Route, hashHistory } from 'react-router'
+import { Router, Route, hashHistory, IndexRoute } from 'react-router'
 import { Provider } from 'react-redux'
 import { store } from './store'
 
@@ -17,6 +17,7 @@ import Estimates from './modules/estimates'
 import Invoices from './modules/invoices'
 
 import Admin from './modules/admin'
+import Dashboard from './modules/admin/dashboard'
 import Users from './modules/admin/users/index'
 import User from './modules/admin/users/user'
 import Account from './modules/admin/account'
@@ -29,27 +30,28 @@ import Reporting from './modules/reporting'
 ReactDOM.render(
     <Provider store={store}>
         <Router history={hashHistory}>
-            <Route component={App}>
-                <Route path="/" component={Home}/>
+            <Route path="/" component={App}>
 
+                <IndexRoute component={Home} />
                 <Route path="/estimates" component={Estimates}/>
 
                 <Route path="/invoices" component={Invoices}/>
-                
-                <Route path="/admin/users/:id" component={User}/>
-                <Route path="/admin/users" component={Users}/>
-                <Route path="/admin/account" component={Account}/>
-                <Route path="/admin/settings" component={Settings}/>
+
                 <Route path="/admin" component={Admin}>
-                    
+                    <IndexRoute component={Dashboard} />
+                    <Route path="/admin/users" component={Users}/>
+                    <Route path="/admin/user/:id" component={User}/>
+                    <Route path="/admin/account" component={Account}/>
+                    <Route path="/admin/settings" component={Settings}/>
                 </Route>
-                
+
                 <Route path="/expenses" component={Expenses}/>
 
                 <Route path="/timesheets" component={Timesheets}/>
 
                 <Route path="/reporting" component={Reporting}/>
 
+                
             </Route>
         </Router>
     </Provider>,
