@@ -24,7 +24,7 @@ create_visible ?
                 </FormGroup>
 
                 <p className="pull-right">
-                    <Button onClick={() => onCancel() }><Glyphicon glyph="remove" /> Cancel</Button>
+                    <Button onClick={() => onCancel() } disabled={creating}><Glyphicon glyph="remove" /> Cancel</Button>
                     {' '}
                     <Button onClick={() => onSave() } bsStyle="primary" disabled={creating}><Glyphicon glyph="floppy-disk" /> Save</Button>
                 </p>
