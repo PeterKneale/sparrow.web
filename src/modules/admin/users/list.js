@@ -4,38 +4,31 @@ import { Link } from 'react-router'
 import { Panel, Button, Glyphicon } from 'react-bootstrap';
 import { invalidateUsers, listUsers, deleteUser } from "./actions"
 import Toolbox from './toolbox'
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
-// TODO: TIDY UP WITH https://camjackson.net/post/9-things-every-reactjs-beginner-should-know
-
-const List = ({onDelete, onDeleteMany, onRefresh, users, list_visible}) => {
-
-    return (
-        <div>
-            { list_visible ?
-                <div className="panel panel-default">
-                    <div className="panel-heading">
-                        <Toolbox onDelete={() => onDeleteMany() }  onRefresh={() => onRefresh() } />
-                    </div>
-                     <div className="list-group">
-                        <ReactCSSTransitionGroup  transitionName="example" transitionEnterTimeout={300} transitionLeaveTimeout={500}>
-                        { renderUsers(users, onDelete) }
-                        </ReactCSSTransitionGroup>
-                    </div>
-                </div>
-                :
-                null
-            }
+const List = ({onDelete, onDeleteMany, onRefresh, users, list_visible}) => (
+    list_visible ?
+        users.length > 0 ? 
+        <div className="panel panel-default">
+            <div className="panel-heading">
+                <Toolbox onDelete={() => onDeleteMany() }  onRefresh={() => onRefresh() } />
+            </div>
+                <div className="list-group">
+                    { renderUsers(users, onDelete) }
+            </div>
         </div>
-    );
-}
+        :
+        <div className="panel panel-default">
+            <div className="panel-heading">
+                No users found
+            </div>
+        </div>
+    : null
+)
 
 const renderUsers = (users, onDelete) => (
       users.map(function (user) {
          return user.deleting 
-            ? renderDeletingUser(user) 
-            : user.deleted 
-                ? renderDeletedUser(user) 
+                ? renderDeletingUser(user) 
                 : renderUser(user, onDelete)
       })
 )
@@ -52,19 +45,13 @@ const renderUser = (user, onDelete) => (
 
 const renderDeletingUser = user => (
     <div className="list-group-item" key={user.id}>
-        <div className="pull-right"><Button bsSize="small" bsStyle="danger" disabled><Glyphicon glyph="trash"/> Deleting</Button></div>
         <h4 className="list-group-item-heading">{user.name}</h4>
         <p className="list-group-item-text">{user.first_name} {user.last_name}</p>
     </div>
 )
 
-const renderDeletedUser = user => (
-    null
-)
-
 List.propTypes = {
     onDelete: PropTypes.func,
-    onArchive: PropTypes.func,
     onRefresh: PropTypes.func,
 
     users: PropTypes.array,

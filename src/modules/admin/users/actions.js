@@ -72,17 +72,6 @@ export function deleteUser(id) {
   }
 }
 
-
-function checkStatus(response) {
-  if (response.status >= 200 && response.status < 300) {
-    return response
-  } else {
-    var error = new Error(response.statusText)
-    error.response = response
-    throw error
-  }
-}
-
 function doListUsers() {
     return (dispatch) => {
         dispatch(requestListUsers())
@@ -129,11 +118,8 @@ export function userManagementReducer(state = initialState, action) {
             return { ...state, users:users }
 
         case RESPONSE_DELETE_USER:
-            var users = state.users.map((user) => {                
-                if (user.id === action.id) 
-                    { return  { ...user, deleting: false, deleted: true } }  
-                else  
-                    { return { ...user } }  
+            var users = state.users.filter(function(user)  {                
+                return user.id != action.id
             });
             return { ...state, users:users }
         case REQUEST_LIST_USERS:
@@ -174,4 +160,16 @@ export function userManagementReducer(state = initialState, action) {
         default:
             return state
     }
+}
+
+
+// Utility functions
+function checkStatus(response) {
+  if (response.status >= 200 && response.status < 300) {
+    return response
+  } else {
+    var error = new Error(response.statusText)
+    error.response = response
+    throw error
+  }
 }
