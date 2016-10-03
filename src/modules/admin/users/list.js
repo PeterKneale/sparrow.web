@@ -1,42 +1,33 @@
 import React, {PropTypes} from 'react';
 import { connect } from 'react-redux'
-import { Panel } from 'react-bootstrap';
-import Toolbox from './toolbox';
+import { Link } from 'react-router'
+import { Panel, Button, Glyphicon } from 'react-bootstrap';
 import { invalidateUsers, fetchUsers } from "./actions"
-import { LinkContainer } from 'react-router-bootstrap';
-import { Button } from 'react-bootstrap';
+import Toolbox from './toolbox';
 
-const List = ({onDelete, onArchive, onEmail, onRefresh, users, list_visible}) => {
+const List = ({onDelete, onDeleteMany, onRefresh, users, list_visible}) => {
     return (
         <div>
             { list_visible ?
                 <div className="panel panel-default">
                     <div className="panel-heading">
-                        <Toolbox onDelete={() => onDelete() } onArchive={() => onArchive() } onEmail={() => onEmail() }  onRefresh={() => onRefresh() } />
+                        <Toolbox onDelete={() => onDeleteMany() }  onRefresh={() => onRefresh() } />
                     </div>
-                    <table className="table">
-                        <thead><tr><th>Select</th><th>First Name</th><th>Last Name</th><th>Username</th><th>Actions</th></tr></thead>
-                        <tbody>
-                            { users.map(function (user) {
-                                return <tr key={user.id}>
-                                    <td><input type="checkbox"/></td>
-                                    <td>{user.first_name}</td>
-                                    <td>{user.last_name}</td>
-                                    <td>{user.name}</td>
-                                    <td>
-                                    <LinkContainer to={{ pathname: '/admin/users/' + user.id }}>
-                                        <Button>Edit</Button>
-                                    </LinkContainer>
-                                    </td>
-                                </tr>
-                            }) }
-                        </tbody>
-                    </table>
+                     <div className="list-group">
+                        { users.map(function (user) {
+                            return  <Link to={`/admin/users/${user.id}`} className="list-group-item" key={user.id}>
+                                <div className="pull-right">
+                                    <Button bsSize="small" bsStyle="danger" onClick={onDelete(user.id)}><Glyphicon glyph="trash"/> Delete</Button>
+                                </div>
+                                <h4 className="list-group-item-heading">{user.name}</h4>
+                                <p className="list-group-item-text">{user.first_name} {user.last_name}</p>
+                            </Link>
+                        }) }
+                    </div>
                 </div>
                 :
                 null
             }
-
         </div>
     );
 }
@@ -44,7 +35,6 @@ const List = ({onDelete, onArchive, onEmail, onRefresh, users, list_visible}) =>
 List.propTypes = {
     onDelete: PropTypes.func,
     onArchive: PropTypes.func,
-    onEmail: PropTypes.func,
     onRefresh: PropTypes.func,
 
     users: PropTypes.array,
@@ -61,7 +51,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
     onDelete: () => { },
     onArchive: () => { },
-    onEmail: () => { },
     onRefresh: () => {
         dispatch(dispatch(invalidateUsers()))
         dispatch(dispatch(fetchUsers()))
