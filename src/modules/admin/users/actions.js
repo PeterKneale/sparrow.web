@@ -1,32 +1,54 @@
 import fetch from 'isomorphic-fetch'
 import Constants from 'constants'
 
-// action types
+// MODE
 export const MODE_SET = 'MODE_SET'
 export const MODE_CREATE = 'MODE_CREATE'
 export const MODE_READ = 'MODE_READ'
-export const REQUEST_USERS = 'REQUEST_USERS'
-export const RECEIVE_USERS = 'RECEIVE_USERS'
-export const REQUEST_USERS_FAIL = 'REQUEST_USERS_FAIL'
-export const INVALIDATE_USERS = 'INVALIDATE_USERS'
 
-// Action Methods
 export const setMode = (mode) => ({
     type: MODE_SET,
     mode: mode
 })
 
-export const requestUsers = () => ({
-    type: REQUEST_USERS
+// LIST
+export const REQUEST_LIST_USERS = 'REQUEST_LIST_USERS'
+export const REQUEST_LIST_USERS_FAIL = 'REQUEST_LIST_USERS_FAIL'
+export const RESPONSE_LIST_USERS = 'RESPONSE_LIST_USERS'
+
+export const requestListUsers = () => ({
+    type: REQUEST_LIST_USERS
 })
-export const requestUsersFail = (message) => ({
-    type: REQUEST_USERS_FAIL,
+export const requestListUsersFail = (message) => ({
+    type: REQUEST_LIST_USERS_FAIL,
     message: message
 })
-export const receiveUsers = (json) => ({
-    type: RECEIVE_USERS,
+export const responseListUsers = (json) => ({
+    type: RESPONSE_LIST_USERS,
     users: json.map(user => user)
 })
+
+// DELETE
+export const REQUEST_DELETE_USER = 'REQUEST_DELETE_USER'
+export const REQUEST_DELETE_USER_FAIL = 'REQUEST_DELETE_USER_FAIL'
+export const RESPONSE_DELETE_USER = 'RESPONSE_DELETE_USER'
+
+export const requestDeleteUser = (id) => ({
+    type: REQUEST_DELETE_USER,
+    id: id
+})
+export const requestDeleteUserFail = (message) => ({
+    type: REQUEST_DELETE_USER_FAIL,
+    message: message
+})
+export const responseDeleteUser = (id) => ({
+    type: RESPONSE_DELETE_USER,
+    id: id
+})
+
+// OTHER
+export const INVALIDATE_USERS = 'INVALIDATE_USERS'
+
 export function invalidateUsers() {
     return {
         type: INVALIDATE_USERS
@@ -35,33 +57,50 @@ export function invalidateUsers() {
 
 // exported functions
 
-export function fetchUsers() {
+export function listUsers() {
   return (dispatch, getState) => {
-    if (shouldFetch(getState())) {
-      return dispatch(doFetchUsers())
+    let state = getState()
+    if (!state.loading) { 
+        return dispatch(doListUsers()) 
     }
   }
 }
 
-// private functions
+export function deleteUser(id) {
+  return (dispatch, getState) => {
+    return dispatch(doDeleteUser(id)) // TODO: Check for user deleting already?
+  }
+}
 
-function shouldFetch(state) {
-    if (!state.users) {
-        return true
-    } else if (state.loading) {
-        return false
-    } else {
-        return state.stale
+
+function checkStatus(response) {
+  if (response.status >= 200 && response.status < 300) {
+    return response
+  } else {
+    var error = new Error(response.statusText)
+    error.response = response
+    throw error
+  }
+}
+
+function doListUsers() {
+    return (dispatch) => {
+        dispatch(requestListUsers())
+        return fetch('/api/users')
+            .then(checkStatus)
+            .then(response => response.json())
+            .then(json => dispatch(responseListUsers(json)))
+            .catch(e => dispatch(requestListUsersFail("Unable to list users.")));
     }
 }
 
-function doFetchUsers() {
+function doDeleteUser(id) {
     return (dispatch) => {
-        dispatch(requestUsers())
-        return fetch('/api/users')
-            .then(response => response.json())
-            .then(json => dispatch(receiveUsers(json)))
-            .catch(e => dispatch(requestUsersFail("Unable to load users at this time.")));
+        dispatch(requestDeleteUser(id))
+        return fetch('/api/users/' + id, {method:'delete'})
+            .then(checkStatus)
+            .then(dispatch(responseDeleteUser(id)))
+            .catch(e => dispatch(requestDeleteUserFail("Unable to delete user." + e)));
     }
 }
 
@@ -80,19 +119,33 @@ const initialState = {
 
 export function userManagementReducer(state = initialState, action) {
     switch (action.type) {
-        case REQUEST_USERS:
+        case REQUEST_DELETE_USER:
+            var users = state.users.map((user) => {                
+                if (user.id === action.id)  
+                    return  { ...user, deleting: true }  
+                else 
+                    return { ...user }  
+            });
+            return { ...state, users:users }
+        case RESPONSE_DELETE_USER:
+            var users = state.users.map((user) => {                
+                if (user.id === action.id) 
+                    return  { ...user, deleting: false, deleted: true }  
+                else  
+                    return { ...user }  
+            });
+            return { ...state, users:users }
+        case REQUEST_LIST_USERS:
             return Object.assign({}, state, {
-                loading: true,
-                stale: false
+                loading: true
             })
-        case RECEIVE_USERS:
+        case RESPONSE_LIST_USERS:
             return Object.assign({}, state, {
                 loading: false,
                 list_visible: true,
-                users: action.users,
-                stale: false
+                users: action.users
             })
-        case REQUEST_USERS_FAIL:
+        case REQUEST_LIST_USERS_FAIL:
             return Object.assign({}, state, {
                 loading: false,
                 list_visible: false,
@@ -101,10 +154,6 @@ export function userManagementReducer(state = initialState, action) {
                 error_message: action.message,
                 create_visible: false
             });
-        case INVALIDATE_USERS:
-            return Object.assign({}, state, {
-                stale: true
-            })
 
         case MODE_SET:
             switch (action.mode) {

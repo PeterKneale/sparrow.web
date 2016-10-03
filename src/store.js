@@ -5,7 +5,7 @@ import thunk from 'redux-thunk';
 import promise from 'redux-promise';
 import createLogger from 'redux-logger';
 
-import { fetchUsers } from "./modules/admin/users/actions"
+import { listUsers } from "./modules/admin/users/actions"
 
 const logger = createLogger();
 const initialState = {};
@@ -15,4 +15,4 @@ export const store  = createStore(rootReducer, initialState, compose(
   window.devToolsExtension ? window.devToolsExtension() : f => f
 ));
 
-store.dispatch(fetchUsers())
+store.dispatch(listUsers())

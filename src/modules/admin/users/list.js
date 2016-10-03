@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { Panel, Button, Glyphicon } from 'react-bootstrap';
-import { invalidateUsers, fetchUsers } from "./actions"
+import { invalidateUsers, listUsers, deleteUser } from "./actions"
 import Toolbox from './toolbox';
 
 const List = ({onDelete, onDeleteMany, onRefresh, users, list_visible}) => {
@@ -15,13 +15,15 @@ const List = ({onDelete, onDeleteMany, onRefresh, users, list_visible}) => {
                     </div>
                      <div className="list-group">
                         { users.map(function (user) {
-                            return  <Link to={`/admin/users/${user.id}`} className="list-group-item" key={user.id}>
-                                <div className="pull-right">
-                                    <Button bsSize="small" bsStyle="danger" onClick={onDelete(user.id)}><Glyphicon glyph="trash"/> Delete</Button>
-                                </div>
-                                <h4 className="list-group-item-heading">{user.name}</h4>
-                                <p className="list-group-item-text">{user.first_name} {user.last_name}</p>
-                            </Link>
+                            return  <div className="list-group-item" key={user.id}>
+                                        <div className="pull-right">
+                                            <Button bsSize="small" bsStyle="danger" onClick={() => onDelete(user.id)}><Glyphicon glyph="trash"/> Delete</Button>
+                                        </div>
+                                        <Link to={`/admin/users/${user.id}`}>
+                                            <h4 className="list-group-item-heading">{user.name}</h4>
+                                        </Link>
+                                        <p className="list-group-item-text">{user.first_name} {user.last_name}</p>
+                                    </div>
                         }) }
                     </div>
                 </div>
@@ -49,11 +51,13 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    onDelete: () => { },
+    onDelete: (id) => { 
+        dispatch(deleteUser(id))
+    },
     onArchive: () => { },
     onRefresh: () => {
-        dispatch(dispatch(invalidateUsers()))
-        dispatch(dispatch(fetchUsers()))
+        dispatch(invalidateUsers())
+        dispatch(listUsers())
     }
 });
 export default connect(
