@@ -122,17 +122,18 @@ export function userManagementReducer(state = initialState, action) {
         case REQUEST_DELETE_USER:
             var users = state.users.map((user) => {                
                 if (user.id === action.id)  
-                    return  { ...user, deleting: true }  
+                    { return  { ...user, deleting: true } }  
                 else 
-                    return { ...user }  
+                    { return { ...user } }
             });
             return { ...state, users:users }
+
         case RESPONSE_DELETE_USER:
             var users = state.users.map((user) => {                
                 if (user.id === action.id) 
-                    return  { ...user, deleting: false, deleted: true }  
+                    { return  { ...user, deleting: false, deleted: true } }  
                 else  
-                    return { ...user }  
+                    { return { ...user } }  
             });
             return { ...state, users:users }
         case REQUEST_LIST_USERS:
@@ -143,17 +144,8 @@ export function userManagementReducer(state = initialState, action) {
             return Object.assign({}, state, {
                 loading: false,
                 list_visible: true,
-                users: action.users
+                users: action.users.map((user) => { return { ...user, deleting:false, deleted:false } })
             })
-        case REQUEST_LIST_USERS_FAIL:
-            return Object.assign({}, state, {
-                loading: false,
-                list_visible: false,
-                users: null,
-                error_visible: true,
-                error_message: action.message,
-                create_visible: false
-            });
 
         case MODE_SET:
             switch (action.mode) {
@@ -168,6 +160,17 @@ export function userManagementReducer(state = initialState, action) {
                         list_visible: true
                     });
             }
+
+        case REQUEST_DELETE_USER_FAIL:
+        case REQUEST_LIST_USERS_FAIL:
+            return Object.assign({}, state, {
+                loading: false,
+                list_visible: false,
+                users: null,
+                error_visible: true,
+                error_message: action.message,
+                create_visible: false
+            });
         default:
             return state
     }
