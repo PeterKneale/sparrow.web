@@ -5,7 +5,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 
 const Menu = ({app, username}) => (
-    <Navbar>
+    <Navbar fluid>
     
         <Navbar.Header>
             <Navbar.Brand>
