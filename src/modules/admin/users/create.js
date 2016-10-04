@@ -41,7 +41,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
     onSave: () => {dispatch(createUser('peter', 'kneale'))},
-    onCancel: () => {dispatch(navigate('/admin/users'))}
+    onCancel: () => {navigate('/admin/users')}
 });
 
 export default connect(
