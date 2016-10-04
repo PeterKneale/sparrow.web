@@ -15,7 +15,10 @@ div.spinner {
   text-align: center;
 }
 
-.list-group-item:hover, a.list-group-item:focus {text-decoration: none;background-color: rgb(245, 245, 245);}
+.list-group-item:hover, a.list-group-item:focus {
+  text-decoration: none;
+  background-color: rgb(245, 245, 245);
+}
 
 .example-enter {
   opacity: 0.01;

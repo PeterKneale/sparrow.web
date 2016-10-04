@@ -16,11 +16,14 @@ import Home from './modules/home'
 import Estimates from './modules/estimates'
 import Invoices from './modules/invoices'
 
-import Admin from './modules/admin'
+import Admin from './modules/admin/index'
 import Dashboard from './modules/admin/dashboard'
 import Users from './modules/admin/users/index'
 import User from './modules/admin/users/user'
+import CreateUser from './modules/admin/users/create'
+
 import Account from './modules/admin/account'
+
 import Settings from './modules/admin/settings'
 
 import Expenses from './modules/expenses'
@@ -39,6 +42,7 @@ ReactDOM.render(
 
                 <Route path="/admin" component={Admin}>
                     <IndexRoute component={Dashboard} />
+                    <Route path="/admin/users/create" component={CreateUser}/>
                     <Route path="/admin/users" component={Users}/>
                     <Route path="/admin/user/:id" component={User}/>
                     <Route path="/admin/account" component={Account}/>
@@ -50,8 +54,6 @@ ReactDOM.render(
                 <Route path="/timesheets" component={Timesheets}/>
 
                 <Route path="/reporting" component={Reporting}/>
-
-                
             </Route>
         </Router>
     </Provider>,

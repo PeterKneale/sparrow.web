@@ -1,41 +1,43 @@
 import React, {PropTypes} from 'react'
 import { connect } from 'react-redux'
-import { Checkbox, ButtonToolbar, ButtonGroup, Button, Glyphicon } from 'react-bootstrap';
-import { setMode, MODE_SET, MODE_CREATE, MODE_READ } from "./actions"
-import { Error, Title, Spinner } from '../../../components';
-import Create from './create';
+import { Notice, Title, MenuAdmin } from '../../../components';
+import { hashHistory } from 'react-router'
+import { Nav, NavItem, Button, Glyphicon, Grid, Row, Col } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 import List from './list';
-import Toolbox from './toolbox';
 
-const Users = ({onCreate, loading, error_visible, error_message}) => {
-    return (
-        <div>
-            <Button bsStyle="primary" bsSize="large" className="pull-right" onClick={() => onCreate() }><Glyphicon glyph="plus" /> Create User</Button>
-            <Title title="Users" subtitle="Add new users and manage existing ones..." />
-            <Create />
-            <Spinner visible={loading}/>
-            <List />
-            <Error visible={error_visible} message={error_message}/>
-        </div>
+const Users = ({error}) => (
+        <Grid>
+            <Row>
+                <Col md={12}>
+                    <MenuAdmin/>
+                    <Title title="User Management" subtitle="Manage users"/>
+                    <Notice header="Error" body={error} style="danger"/>
+                </Col>
+            </Row>
+            <Row>
+                <Col md={2}>
+                     <LinkContainer to="/admin/users/create"><Button bsStyle="primary"><Glyphicon glyph="plus" /> Create User</Button></LinkContainer>
+                </Col>
+                <Col md={10}>
+                    <List />
+                </Col>
+            </Row>
+        </Grid>
     )
-}
 
 Users.propTypes = {
-    loading: PropTypes.bool,
-    error_visible: PropTypes.bool,
-    error_message: PropTypes.string
+    error: PropTypes.string
 }
 
 const mapStateToProps = (state) => {
     return {
-        loading: state.usermanagement.loading,
-        error_visible: state.usermanagement.error_visible,
-        error_message: state.usermanagement.error_message
+        error: state.usermanagement.error
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    onCreate: () => {dispatch(setMode(MODE_CREATE))},
+    onCreate: () => {dispatch(navigate('/admin/users/create'))},
 });
 
 export default connect(

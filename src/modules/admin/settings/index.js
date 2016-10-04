@@ -1,14 +1,16 @@
 import React from 'react'
-import {Title} from '../../../components';
-import { Button } from 'react-bootstrap';
+import { Title, MenuAdmin } from '../../../components';
+import { Grid, Row, Col } from 'react-bootstrap';
 
 const Settings = () => (
-    <div>
-        <Title title="Settings" subtitle="Your settings."/>
-        <div className="panel panel-default">
-            <div className="panel-heading">Settings</div>
-        </div>
-    </div>
+    <Grid>
+        <Row>
+            <Col md={12}>
+                <MenuAdmin/>
+                <Title title="Settings" subtitle="Manage your settings"/>
+            </Col>
+        </Row>
+    </Grid>
 )
 
 Settings.propTypes = {

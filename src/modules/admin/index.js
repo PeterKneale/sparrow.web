@@ -1,18 +1,13 @@
 import React from 'react'
-import {Title, MenuAdmin} from '../../components';
 
-const Admin = (props) => {
-    return (
-        <div>
-            <MenuAdmin/>
-            {props.children}
-        </div>
-    )
+class Admin extends React.Component {
+    render() {
+        return (
+            <div>
+                {this.props.children}
+            </div>
+        )
+    }
 }
 
-Admin.propTypes = {
-
-};
-
 export default Admin
-

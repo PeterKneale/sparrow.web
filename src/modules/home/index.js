@@ -3,7 +3,7 @@ import {Jumbo} from '../../components';
 
 const Home = () => {
     return (
-        <Jumbo title="Welcome to sparrow" body="Fast and small"/>
+        <Jumbo heading="Welcome to sparrow" body="Fast and small"/>
     )
 }
 

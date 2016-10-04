@@ -1,14 +1,16 @@
 import React from 'react'
-import {Title} from '../../../components';
-import { Button } from 'react-bootstrap';
+import { Title, MenuAdmin } from '../../../components';
+import { Grid, Row, Col } from 'react-bootstrap';
 
 const Account = () => (
-    <div>
-        <Title title="Account" subtitle="Your account"/>
-        <div className="panel panel-default">
-            <div className="panel-heading">Account</div>
-        </div>
-    </div>
+    <Grid>
+        <Row>
+            <Col md={12}>
+                <MenuAdmin/>
+                <Title title="Account Management" subtitle="Manage your account"/>
+            </Col>
+        </Row>
+    </Grid>
 )
 
 Account.propTypes = {

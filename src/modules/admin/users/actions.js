@@ -2,16 +2,6 @@ import fetch from 'isomorphic-fetch'
 import Constants from 'constants'
 import { hashHistory } from 'react-router'
 
-// MODE
-export const MODE_SET = 'MODE_SET'
-export const MODE_CREATE = 'MODE_CREATE'
-export const MODE_READ = 'MODE_READ'
-
-export const setMode = (mode) => ({
-    type: MODE_SET,
-    mode: mode
-})
-
 // CREATE
 export const REQUEST_CREATE_USER = 'REQUEST_CREATE_USER'
 export const REQUEST_CREATE_USER_FAIL = 'REQUEST_CREATE_USER_FAIL'
@@ -95,6 +85,9 @@ export function invalidateUsers() {
 }
 
 // exported functions
+export function navigate(url){
+    hashHistory.push(url)
+}
 
 export function listUsers() {
   return (dispatch, getState) => {
@@ -145,7 +138,6 @@ function doGetUsers() {
     }
 }
 
-responseCreateUser
 function doCreateUser(first_name, last_name) {
     return (dispatch) => {
         dispatch(requestCreateUser())
@@ -154,11 +146,12 @@ function doCreateUser(first_name, last_name) {
             .then(response => {
                 let id = response.headers.get('location').split('/').pop()
                 dispatch(responseCreateUser(id))
-                hashHistory.push('/admin/user/'+ id)
+                navigate('/admin/user/'+ id)
             })
             .catch(e => dispatch(requestCreateUserFail("Unable to create user.", e)));
     }
 }
+
 function doDeleteUser(id) {
     return (dispatch) => {
         dispatch(requestDeleteUser(id))
@@ -175,10 +168,7 @@ const initialState = {
     users: [],
     creating: false,
     loading: false,
-    list_visible: true,
-    create_visible: false,
-    error_visible: false,
-    error_message: null
+    error: null
 }
 
 // reducers
@@ -194,9 +184,7 @@ export function userManagementReducer(state = initialState, action) {
         case RESPONSE_CREATE_USER:
             return { 
                 ...state, 
-                creating: false,
-                create_visible: false,
-                list_visible: true
+                creating: false
             }
 
         case REQUEST_DELETE_USER:
@@ -221,38 +209,18 @@ export function userManagementReducer(state = initialState, action) {
             return { 
                 ...state,
                 loading: false,
-                list_visible: true,
                 users: action.users.map((user) => { return { ...user, deleting: false, updating: false } })
             }
 
-        case MODE_SET:
-            switch (action.mode) {
-                case MODE_CREATE:
-                    return { 
-                        ...state,
-                        create_visible: true,
-                        list_visible: false
-                    };
-                case MODE_READ:
-                    return { 
-                        ...state,
-                        create_visible: false,
-                        list_visible: true
-                    };
-            } 
         case REQUEST_CREATE_USER_FAIL:
         case REQUEST_GET_USER_FAIL:
         case REQUEST_DELETE_USER_FAIL:
         case REQUEST_LIST_USERS_FAIL:
-            console.log(action.exception)
             return { 
                 ...state,
                 loading: false,
-                list_visible: false,
                 users: null,
-                error_visible: true,
-                error_message: action.message,
-                create_visible: false
+                error: action.message
             };
 
         default:

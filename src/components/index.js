@@ -1,4 +1,4 @@
-export {default as Error} from './Error'
+export {default as Notice} from './Notice'
 export {default as Jumbo} from './Jumbo'
 export {default as Menu} from './Menu'  
 export {default as MenuAdmin} from './MenuAdmin'  
