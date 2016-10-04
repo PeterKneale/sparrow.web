@@ -39,6 +39,26 @@ export const responseListUsers = (json) => ({
     users: json.map(user => user)
 })
 
+// Update
+export const REQUEST_UPDATE_USER = 'REQUEST_UPDATE_USER'
+export const REQUEST_UPDATE_USER_FAIL = 'REQUEST_UPDATE_USER_FAIL'
+export const RESPONSE_UPDATE_USER = 'RESPONSE_UPDATE_USER'
+
+export const requestUpdateUser = (id, first_name, last_name) => ({
+    type: REQUEST_UPDATE_USER,
+    id: id,
+    first_name: first_name,
+    last_name: last_name
+})
+export const requestUpdateUserFail = (message) => ({
+    type: REQUEST_UPDATE_USER_FAIL,
+    message: message
+})
+export const responseUpdateUser = (id) => ({
+    type: RESPONSE_UPDATE_USER,
+    id: id
+})
+
 // DELETE
 export const REQUEST_DELETE_USER = 'REQUEST_DELETE_USER'
 export const REQUEST_DELETE_USER_FAIL = 'REQUEST_DELETE_USER_FAIL'
@@ -75,15 +95,6 @@ export const responseGetUser = (json) => ({
     user: json
 })
 
-// OTHER
-export const INVALIDATE_USERS = 'INVALIDATE_USERS'
-
-export function invalidateUsers() {
-    return {
-        type: INVALIDATE_USERS
-    }
-}
-
 // exported functions
 export function navigate(url){
     hashHistory.push(url)
@@ -107,14 +118,22 @@ export function createUser(first_name, last_name) {
 }
 export function getUser(id) {
   return (dispatch, getState) => {
-    return dispatch(doGetUser(id)) // TODO: Check for user deleting already?
+    return dispatch(doGetUser(id))
   }
 }
+
 export function deleteUser(id) {
   return (dispatch, getState) => {
-    return dispatch(doDeleteUser(id)) // TODO: Check for user deleting already?
+    return dispatch(doDeleteUser(id))
   }
 }
+
+export function updateUser(id, first_name, last_name) {
+  return (dispatch, getState) => {
+    return dispatch(doUpdateUser(id, first_name, last_name))
+  }
+}
+
 
 function doListUsers() {
     return (dispatch) => {
@@ -146,9 +165,22 @@ function doCreateUser(first_name, last_name) {
             .then(response => {
                 let id = response.headers.get('location').split('/').pop()
                 dispatch(responseCreateUser(id))
-                navigate('/admin/user/'+ id)
+                navigate('/admin/users/view/'+ id)
             })
             .catch(e => dispatch(requestCreateUserFail("Unable to create user.", e)));
+    }
+}
+
+function doUpdateUser(id, first_name, last_name) {
+    return (dispatch) => {
+        dispatch(requestUpdateUser())
+        return fetch('/api/users/' + id, {method:'put', body: JSON.stringify({first_name:first_name, last_name: last_name})})
+            .then(checkStatus)
+            .then(response => {
+                dispatch(responseUpdateUser(id))
+                navigate('/admin/users/view/'+ id)
+            })
+            .catch(e => dispatch(requestUpdateUserFail("Unable to update user.", e)));
     }
 }
 
@@ -197,6 +229,18 @@ export function userManagementReducer(state = initialState, action) {
             return { 
                 ...state, 
                 users : state.users.filter(function(user) { return user.id != action.id } ) 
+            }
+
+        case REQUEST_UPDATE_USER:
+            return { 
+                ...state, 
+                users : state.users.map((user) => { return  { ...user, updating: user.id === action.id } })
+            }
+
+        case RESPONSE_UPDATE_USER:
+            return { 
+                ...state, 
+                users : state.users // TODO: THE USER SHOULD BE UPDATEDE OR ALL MARKED AS STALE 
             }
 
         case REQUEST_LIST_USERS:

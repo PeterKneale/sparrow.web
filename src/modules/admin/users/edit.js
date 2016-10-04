@@ -1,11 +1,11 @@
 import React, {PropTypes} from 'react'
 import { connect } from 'react-redux'
 import { Panel, Form, FormGroup, ControlLabel, FormControl, Button, Glyphicon, Grid, Row, Col } from 'react-bootstrap';
-import { navigate, createUser } from "./actions"
+import { navigate, updateUser } from "./actions"
 import { Notice, Title, MenuAdmin } from '../../../components';
 
-const Create = ({error, creating, onCancel, onSave}) => (
-        <Panel header="Create a new user">
+const Edit = ({error, updating, onCancel, onSave}) => (
+        <Panel header="Edit a user">
             <Form>
                 <FormGroup>
                     <ControlLabel>First Name</ControlLabel>
@@ -17,34 +17,34 @@ const Create = ({error, creating, onCancel, onSave}) => (
                 </FormGroup>
 
                 <p className="pull-right">
-                    <Button onClick={() => onCancel() } disabled={creating}><Glyphicon glyph="remove" /> Cancel</Button>
+                    <Button onClick={() => onCancel() } disabled={updating}><Glyphicon glyph="remove" /> Cancel</Button>
                     {' '}
-                    <Button onClick={() => onSave() } bsStyle="primary" disabled={creating}><Glyphicon glyph="floppy-disk" /> Save</Button>
+                    <Button onClick={() => onSave() } bsStyle="primary" disabled={updating}><Glyphicon glyph="floppy-disk" /> Update</Button>
                 </p>
             </Form>
         </Panel>
 )
 
-Create.propTypes = {
+Edit.propTypes = {
     error: PropTypes.string,
     onSave: PropTypes.func,
     onCancel: PropTypes.func,
-    creating: PropTypes.bool
+    updating: PropTypes.bool
 }
 
 const mapStateToProps = (state) => {
     return {
         error: state.usermanagement.error,
-        creating: state.usermanagement.creating
+        updating: state.usermanagement.updating
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    onSave: () => {dispatch(createUser('peter', 'kneale'))},
-    onCancel: () => {dispatch(navigate('/admin/users'))}
+    onSave: () => { dispatch(updateUser(236, 'peter', 'kneale'))},
+    onCancel: () => {navigate('/admin/users')}
 });
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(Create)
+)(Edit)

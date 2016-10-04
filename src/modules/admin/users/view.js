@@ -1,9 +1,12 @@
 import React from 'react'
 import {Title} from '../../../components';
+import { Panel } from 'react-bootstrap';
 
 const User = () => {
     return (
-        <p>User Details</p>
+         <Panel header="User Details">
+            This is the users details
+        </Panel>
     )
 }
 

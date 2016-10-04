@@ -2,25 +2,25 @@ import React, {PropTypes} from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { Panel, Button, Glyphicon, ListGroup, ListGroupItem  } from 'react-bootstrap';
-import { invalidateUsers, listUsers, deleteUser } from "./actions"
+import { navigate, listUsers, deleteUser } from "./actions"
 import Toolbox from './toolbox'
 import { Spinner, Notice } from '../../../components';
 
-const List = ({onDelete, onRefresh, users, loading}) => {
+const List = ({loading, users, onEdit, onDelete, onRefresh}) => {
     if (loading)
         return <Spinner/>
-    else 
-        if (users.length == 0) 
-            return none()  
-        else 
-            return renderUsers(users, onDelete, onRefresh)
+    else
+        if (users.length == 0)
+            return none()
+        else
+            return renderUsers(users, onEdit, onDelete, onRefresh)
 };
 
 const none = () => (
     <Notice header="No users found" body="There are no users present in your account" style="info"/>
 )
 
-const renderUsers = (users, onDelete, onRefresh) => (
+const renderUsers = (users, onEdit, onDelete, onRefresh) => (
     <div className="panel panel-default">
         <div className="panel-heading">
             <Toolbox onRefresh={() => onRefresh() } />
@@ -28,31 +28,36 @@ const renderUsers = (users, onDelete, onRefresh) => (
         <div className="list-group">
             { users.map(function (user) {
                 return (!user.deleting)
-                    ? renderUser(user, onDelete)
+                    ? renderUser(user, onEdit, onDelete)
                     : renderUserDeleting(user)
-            })}
+            }) }
         </div>
     </div>
 )
 
-const renderUser = (user, onDelete) => (
+const renderUser = (user, onEdit, onDelete) => (
     <div className="list-group-item" key={user.id}>
-        <div className="pull-right"><Button bsSize="small" bsStyle="danger" onClick={() => onDelete(user.id) }><Glyphicon glyph="trash"/> Delete</Button></div>
-        <Link to={`/admin/user/${user.id}`}>
+        <div className="pull-right">
+            <Button bsSize="small" onClick={() => onEdit(user.id) }><Glyphicon glyph="pencil"/> Edit</Button>
+            {' '}
+            <Button bsSize="small" bsStyle="danger" onClick={() => onDelete(user.id) }><Glyphicon glyph="trash"/> Delete</Button>
+        </div>
+        <Link to={`/admin/users/view/${user.id}`}>
             <h4 className="list-group-item-heading">{user.name}</h4>
         </Link>
-        <p className="list-group-item-text">ID:{user.id} {user.last_name}</p>
+        <p className="list-group-item-text">ID: {user.id} {user.last_name}</p>
     </div>
 )
 
 const renderUserDeleting = (user) => (
     <div className="list-group-item danger" key={user.id}>
         <h4 className="list-group-item-heading">{user.name}</h4>
-        <p className="list-group-item-text">ID:{user.id} {user.last_name}</p>
+        <p className="list-group-item-text">ID: {user.id} {user.last_name}</p>
     </div>
 )
 
 List.propTypes = {
+    onEdit: PropTypes.func,
     onDelete: PropTypes.func,
     onRefresh: PropTypes.func,
     loading: PropTypes.bool,
@@ -67,8 +72,9 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
+    onEdit: (id) => { navigate('/admin/users/edit/' + id) },
     onDelete: (id) => { dispatch(deleteUser(id)) },
-    onRefresh: () => { dispatch(renderUsers()) }
+    onRefresh: () => { dispatch(listUsers()) }
 });
 
 export default connect(

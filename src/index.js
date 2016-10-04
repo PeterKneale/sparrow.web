@@ -18,9 +18,12 @@ import Invoices from './modules/invoices'
 
 import Admin from './modules/admin/index'
 import Dashboard from './modules/admin/dashboard'
-import Users from './modules/admin/users/index'
-import User from './modules/admin/users/user'
-import CreateUser from './modules/admin/users/create'
+
+import Layout from './modules/admin/users/layout'
+import List from './modules/admin/users/list'
+import View from './modules/admin/users/view'
+import Edit from './modules/admin/users/edit'
+import Create from './modules/admin/users/create'
 
 import Account from './modules/admin/account'
 
@@ -42,9 +45,12 @@ ReactDOM.render(
 
                 <Route path="/admin" component={Admin}>
                     <IndexRoute component={Dashboard} />
-                    <Route path="/admin/users/create" component={CreateUser}/>
-                    <Route path="/admin/users" component={Users}/>
-                    <Route path="/admin/user/:id" component={User}/>
+                    <Route path="/admin/users" component={Layout}>
+                        <IndexRoute component={List} />
+                        <Route path="/admin/users/create" component={Create}/>
+                        <Route path="/admin/users/view/:id" component={View}/>
+                        <Route path="/admin/users/edit/:id" component={Edit}/>
+                    </Route>
                     <Route path="/admin/account" component={Account}/>
                     <Route path="/admin/settings" component={Settings}/>
                 </Route>
