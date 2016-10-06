@@ -1,44 +1,60 @@
-# Before
+## Before
 - Install node
 - Install npm
 
-# Git
+## Clone
+- https://github.com/Simplicate/sparrow.web
+- https://github.com/Simplicate/sparrow.api 
+
+## Development cycle
 ```
-eval `ssh-agent -s`
-ssh-add ~/.ssh/id_rsa
-git clone git@github.com:Simplicate/sparrow.web.git
-```
-Components Used
-https://github.com/react-bootstrap/react-bootstrap
-https://github.com/ReactTraining/react-router
-https://github.com/react-bootstrap/react-router-bootstrap
-- Loaders
-	- css-loader
-	- file-loader
-	- json-loader
-	- less-loader
-	- raw-loader
-	- sass-loader
-	- style-loader
-	- url-loader
-# Development cycle
-```
-npm run build
-npm run host
+npm run build (Control Shift B)
+npm run host 
 npm rnu test
 rpm run clean
 npm version minor
 ```
 
-# Done
+### VS Code customisations
+```
+// Place your key bindings in this file to overwrite the defaults
+[
+    {
+        "key": "ctrl+shift+z",
+        "command": "workbench.action.tasks.runTask"
+    }
+]
+``` 
+
+## Done
 ```
 git add .
 git commit -a -m "I developed this"
 git push origin master --tags
 ```
 
+## Main Components
+	- https://github.com/react-bootstrap/react-bootstrap
+	- https://github.com/ReactTraining/react-router
+	- https://github.com/reactjs/redux
+	- https://github.com/react-bootstrap/react-router-bootstrap
+	- https://github.com/babel/babel
+	
+## Others Components
+	- Babel Presets: es2015, react, stage-2
+	- Loaders: babel-loader, css-loader, file-loader, json-loader, less-loader, raw-loader, sass-loader, style-loader, url-loader
+
+## Developer tools
+ - https://github.com/gaearon/redux-devtools
+ - https://github.com/zalmoxisus/redux-devtools-extension
 
 
-#notes:
+### notes:
 This might be better
 http://allenfang.github.io/react-bootstrap-table
+
+```
+eval `ssh-agent -s`
+ssh-add ~/.ssh/id_rsa
+git clone git@github.com:Simplicate/sparrow.web.git
+```
