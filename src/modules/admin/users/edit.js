@@ -4,44 +4,50 @@ import { Panel, Form, FormGroup, ControlLabel, FormControl, Button, Glyphicon, G
 import { navigate, updateUser } from "./actions"
 import { Notice, Title, MenuAdmin } from '../../../components';
 
-const Edit = ({error, updating, onCancel, onSave}) => (
-        <Panel header="Edit a user">
-            <Form>
-                <FormGroup>
-                    <ControlLabel>First Name</ControlLabel>
-                    <FormControl type="text" placeholder="John" />
-                </FormGroup>
-                <FormGroup>
-                    <ControlLabel>Last Name</ControlLabel>
-                    <FormControl type="text" placeholder="Smith"/>
-                </FormGroup>
+const Edit = ({id, name, first_name, last_name, updating, onCancel, onSave}) => (
+    <Panel header="Edit a user">
+        <Form>
+            <FormGroup>
+                <ControlLabel>First Name</ControlLabel>
+                <FormControl type="text" value={first_name}/>
+            </FormGroup>
+            <FormGroup>
+                <ControlLabel>Last Name</ControlLabel>
+                <FormControl type="text" value={last_name}/>
+            </FormGroup>
 
-                <p className="pull-right">
-                    <Button onClick={() => onCancel() } disabled={updating}><Glyphicon glyph="remove" /> Cancel</Button>
-                    {' '}
-                    <Button onClick={() => onSave() } bsStyle="primary" disabled={updating}><Glyphicon glyph="floppy-disk" /> Update</Button>
-                </p>
-            </Form>
-        </Panel>
+            <p className="pull-right">
+                <Button onClick={() => onCancel() } disabled={updating}><Glyphicon glyph="remove" /> Cancel</Button>
+                {' '}
+                <Button onClick={() => onSave(id) } bsStyle="primary" disabled={updating}><Glyphicon glyph="floppy-disk" /> Update</Button>
+            </p>
+        </Form>
+    </Panel>
 )
 
 Edit.propTypes = {
-    error: PropTypes.string,
     onSave: PropTypes.func,
     onCancel: PropTypes.func,
-    updating: PropTypes.bool
+    updating: PropTypes.bool,
+    id: PropTypes.number,
+    name: PropTypes.string,
+    first_name: PropTypes.string,
+    last_name: PropTypes.string
 }
 
 const mapStateToProps = (state) => {
     return {
-        error: state.usermanagement.error,
-        updating: state.usermanagement.updating
+        updating: state.usermanagement.updating,
+        id: state.usermanagement.user.id,
+        name: state.usermanagement.user.name,
+        first_name: state.usermanagement.user.first_name,
+        last_name: state.usermanagement.user.last_name
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    onSave: () => { dispatch(updateUser(236, 'peter', 'kneale'))},
-    onCancel: () => {navigate('/admin/users')}
+    onSave: (id) => { dispatch(updateUser(id, 'peter', 'kneale')) },
+    onCancel: () => { navigate('/admin/users') }
 });
 
 export default connect(

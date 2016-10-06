@@ -33,6 +33,9 @@ import Expenses from './modules/expenses'
 import Timesheets from './modules/timesheets'
 import Reporting from './modules/reporting'
 
+import { getUser, listUsers } from "./modules/admin/users/actions"
+
+
 ReactDOM.render(
     <Provider store={store}>
         <Router history={hashHistory}>
@@ -46,10 +49,10 @@ ReactDOM.render(
                 <Route path="/admin" component={Admin}>
                     <IndexRoute component={Dashboard} />
                     <Route path="/admin/users" component={Layout}>
-                        <IndexRoute component={List} />
+                        <IndexRoute component={List} onEnter={()=>store.dispatch(listUsers()) }/>
                         <Route path="/admin/users/create" component={Create}/>
-                        <Route path="/admin/users/view/:id" component={View}/>
-                        <Route path="/admin/users/edit/:id" component={Edit}/>
+                        <Route path="/admin/users/view/:id" component={View} onEnter={(state)=>store.dispatch(getUser(state.params.id)) }/>
+                        <Route path="/admin/users/edit/:id" component={Edit} onEnter={(state)=>store.dispatch(getUser(state.params.id)) }/>
                     </Route>
                     <Route path="/admin/account" component={Account}/>
                     <Route path="/admin/settings" component={Settings}/>

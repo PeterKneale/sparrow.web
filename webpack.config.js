@@ -4,6 +4,8 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
+//TODO Setup http://webpack.github.io/docs/configuration.html#resolve-root
+
 module.exports = {
     entry: {
         app: ['./src/index.js']

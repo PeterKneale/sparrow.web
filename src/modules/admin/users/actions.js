@@ -146,14 +146,14 @@ function doListUsers() {
     }
 }
 
-function doGetUsers() {
+function doGetUser(id) {
     return (dispatch) => {
         dispatch(requestGetUser(id))
-        return fetch('/api/users' + id)
+        return fetch('/api/users/' + id)
             .then(checkStatus)
             .then(response => response.json())
             .then(json => dispatch(responseGetUser(json)))
-            .catch(e => dispatch(requestGetUserFail("Unable to list users.")));
+            .catch(e => dispatch(requestGetUserFail("Unable to get user.")));
     }
 }
 
@@ -197,6 +197,7 @@ function doDeleteUser(id) {
 // state
 
 const initialState = {
+    user: {},
     users: [],
     creating: false,
     loading: false,
@@ -242,13 +243,19 @@ export function userManagementReducer(state = initialState, action) {
                 ...state, 
                 users : state.users // TODO: THE USER SHOULD BE UPDATEDE OR ALL MARKED AS STALE 
             }
-
+        case REQUEST_GET_USER:
         case REQUEST_LIST_USERS:
             return { 
                 ...state, 
                 loading : true 
             }
 
+        case RESPONSE_GET_USER:
+            return { 
+                ...state,
+                loading: false,
+                user: action.user
+            }
         case RESPONSE_LIST_USERS:
             return { 
                 ...state,
