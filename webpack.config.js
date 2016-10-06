@@ -8,6 +8,7 @@ module.exports = {
     entry: {
         app: ['./src/index.js']
     },
+    
     output: {
         path: 'build',
         filename: "bundle.js"

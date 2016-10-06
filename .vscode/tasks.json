@@ -5,19 +5,26 @@
     "command": "npm",
     "isShellCommand": true,
     "showOutput": "always",
-    "suppressTaskName": false,
+    "suppressTaskName": true,
     "tasks": [
         {
-            "taskName": "build",
-            "args": ["build"]
+            "taskName": "clean",
+            "args": ["run", "clean"]
         },
         {
-            "taskName": "update",
-            "args": ["update"]
+            "taskName": "build",
+            "args": ["build"],
+            "isBuildCommand": true
         },
         {
             "taskName": "test",
-            "args": ["test"]
+            "args": ["test"],
+            "isTestCommand": true
+        },
+        {
+            "taskName": "host",
+            "args": ["run", "host"],
+            "isWatching": true
         }
     ]
 }
