@@ -15,6 +15,10 @@ rpm run clean
 npm version minor
 ```
 
+## Developer tools
+ - https://github.com/gaearon/redux-devtools
+ - https://github.com/zalmoxisus/redux-devtools-extension
+
 ### VS Code customisations
 ```
 // Place your key bindings in this file to overwrite the defaults
@@ -44,9 +48,6 @@ git push origin master --tags
 	- Babel Presets: es2015, react, stage-2
 	- Loaders: babel-loader, css-loader, file-loader, json-loader, less-loader, raw-loader, sass-loader, style-loader, url-loader
 
-## Developer tools
- - https://github.com/gaearon/redux-devtools
- - https://github.com/zalmoxisus/redux-devtools-extension
 
 
 ### notes:
