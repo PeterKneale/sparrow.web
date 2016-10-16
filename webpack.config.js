@@ -75,8 +75,9 @@ module.exports = {
         stats: { colors: true },
         proxy: {
             '/api': {
-                target: 'http://localhost:81',
-                secure: false
+                target: 'http://192.168.99.101:8080',
+                secure: false,
+                pathRewrite: {'^/api' : ''}
             }
         }
     }

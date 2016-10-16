@@ -15,6 +15,16 @@ rpm run clean
 npm version minor
 ```
 
+## Build docker image
+
+```
+docker build -t web .
+
+docker run --name web \
+	-p 80:80 \
+	-d web
+```
+
 ## Developer tools
  - https://github.com/gaearon/redux-devtools
  - https://github.com/zalmoxisus/redux-devtools-extension
@@ -47,7 +57,6 @@ git push origin master --tags
 ## Others Components
 	- Babel Presets: es2015, react, stage-2
 	- Loaders: babel-loader, css-loader, file-loader, json-loader, less-loader, raw-loader, sass-loader, style-loader, url-loader
-
 
 
 ### notes:
