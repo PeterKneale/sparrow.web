@@ -11,7 +11,7 @@ Sparrow WEB
     ```
     npm run build
     docker build -t sparrow/web-debug -f Dockerfile.debug .
-    docker tag -f sparrow/web-debug gcr.io/simplicate-sparrow-project/web-debug
+    docker tag sparrow/web-debug gcr.io/simplicate-sparrow-project/web-debug
     gcloud docker -- push gcr.io/simplicate-sparrow-project/web-debug
     ```
 
@@ -19,7 +19,7 @@ Sparrow WEB
     ```
     npm run build
     docker build -t sparrow/web-release -f Dockerfile.release .
-    docker tag -f sparrow/web-release gcr.io/simplicate-sparrow-project/web-release
+    docker tag sparrow/web-release gcr.io/simplicate-sparrow-project/web-release
     gcloud docker -- push gcr.io/simplicate-sparrow-project/web-release
     ```
 
