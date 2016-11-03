@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import './App.css';
-import Nav from './components/Nav'
+import Menu from './components/Menu'
+import Jumbo from './components/Jumbo'
 
 class App extends Component {
   render() {
     return (
-      <Nav/>
+      <div>
+        <Menu />
+        <Jumbo heading="Sparrow!" body="Sparrow is a lightweight application" />
+      </div>
     );
   }
 }
