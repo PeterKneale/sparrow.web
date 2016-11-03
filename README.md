@@ -1,9 +1,12 @@
 # Sparrow
 Sparrow WEB
 
-## Developer tools
- - https://github.com/gaearon/redux-devtools
- - https://github.com/zalmoxisus/redux-devtools-extension
+## Links
+- [create-react-app](https://github.com/facebookincubator/create-react-app)
+- [React](REACT.md)
+- Development tools
+  - Chrome extension: [redux-devtools](https://github.com/gaearon/redux-devtools)
+  - Chrome extension: [redux-devtools-extension](https://github.com/zalmoxisus/redux-devtools-extension)
 
 ## Publish
 
