@@ -8,6 +8,7 @@ Sparrow WEB
 ## Publish
 
  - Build the `debug` docker image using the NGINX base image.
+ 
     ```
     npm run build
     docker build -t sparrow/web-debug -f Dockerfile.debug .
@@ -16,6 +17,7 @@ Sparrow WEB
     ```
 
 - Build the `release` docker image using the NGINX base image.
+
     ```
     npm run build
     docker build -t sparrow/web-release -f Dockerfile.release .
@@ -25,14 +27,15 @@ Sparrow WEB
 
 ## Run
  - run the docker container
-	```
-	docker run --name web \
-		-p 80:80 \
-		-d sparrow/web-debug
-	```
+   ```
+   docker run --name web \
+	-p 80:80 \
+	-d sparrow/web-debug
+   ```
 
 ## Stop
 - delete local containers and images
+
     ```
     docker rm -f $(docker ps -a -q)
     docker rmi -f $(docker images -q)
