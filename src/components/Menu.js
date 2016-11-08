@@ -1,8 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router'
 import { LinkContainer } from 'react-router-bootstrap';
-import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
-
+import { Navbar, Nav, NavItem } from 'react-bootstrap';
 
 const Menu = () => {
   return (

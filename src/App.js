@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
-import Menu from './components/Menu'
-import Jumbo from './components/Jumbo'
+import Menu from './components/menu'
 
 class App extends Component {
   render() {
     return (
       <div>
         <Menu />
-        <Jumbo heading="Sparrow!" body="Sparrow is a lightweight application" />
+         {this.props.children}
       </div>
     );
   }

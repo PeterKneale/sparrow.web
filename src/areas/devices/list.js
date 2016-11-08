@@ -1,12 +1,12 @@
 import React from 'react';
 import Header from '../../components'
 
-const Users = () => {
+const DevicesList = () => {
     return (
         <div>
-            <Header heading="Users"/>
+            <Header heading="Devices"/>
         </div>
     );
 };
 
-export default Users;
+export default DevicesList;
