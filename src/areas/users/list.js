@@ -3,34 +3,10 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { Button, Glyphicon } from 'react-bootstrap';
 import { navigate, listUsers, deleteUser } from "./actions"
-
-const UsersList = ({loading, users, onEdit, onDelete, onRefresh}) => {
-    if (loading)
-        return <div>loading..</div>
-    else
-        if (users.length == 0)
-            return none()
-        else
-            return renderUsers(users, onEdit, onDelete, onRefresh)
-};
+import { Spinner, Notice } from '../../components';
 
 const none = () => (
     <Notice header="No users found" body="There are no users present in your account" style="info"/>
-)
-
-const renderUsers = (users, onEdit, onDelete, onRefresh) => (
-    <div className="panel panel-default">
-        <div className="panel-heading">
-            <Toolbox onRefresh={() => onRefresh() } />
-        </div>
-        <div className="list-group">
-            { users.map(function (user) {
-                return (!user.deleting)
-                    ? renderUser(user, onEdit, onDelete)
-                    : renderUserDeleting(user)
-            }) }
-        </div>
-    </div>
 )
 
 const renderUser = (user, onEdit, onDelete) => (
@@ -53,6 +29,29 @@ const renderUserDeleting = (user) => (
         <p className="list-group-item-text">ID: {user.id} {user.last_name}</p>
     </div>
 )
+
+const renderUsers = (users, onEdit, onDelete, onRefresh) => (
+    <div className="panel panel-default">
+        <div className="list-group">
+            { users.map(function (user) {
+                return (!user.deleting)
+                    ? renderUser(user, onEdit, onDelete)
+                    : renderUserDeleting(user)
+            }) }
+        </div>
+    </div>
+)
+
+
+const UsersList = ({loading, users, onEdit, onDelete, onRefresh}) => {
+    if (loading)
+        return <Spinner/>
+    else
+        if (users.length === 0)
+            return none()
+        else
+            return renderUsers(users, onEdit, onDelete, onRefresh)
+};
 
 UsersList.propTypes = {
     onEdit: PropTypes.func,

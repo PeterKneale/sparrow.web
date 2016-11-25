@@ -2,6 +2,8 @@ import fetch from 'isomorphic-fetch'
 import Constants from 'constants'
 import { hashHistory } from 'react-router'
 
+export const BASE_URL = 'http://api-dev.webapitester.com/'
+
 // CREATE
 export const REQUEST_CREATE_USER = 'REQUEST_CREATE_USER'
 export const REQUEST_CREATE_USER_FAIL = 'REQUEST_CREATE_USER_FAIL'
@@ -138,7 +140,7 @@ export function updateUser(id, first_name, last_name) {
 function doListUsers() {
     return (dispatch) => {
         dispatch(requestListUsers())
-        return fetch('http://api.webapitester.com/users')
+        return fetch(BASE_URL + 'users')
             .then(checkStatus)
             .then(response => response.json())
             .then(json => dispatch(responseListUsers(json)))
@@ -149,7 +151,7 @@ function doListUsers() {
 function doGetUser(id) {
     return (dispatch) => {
         dispatch(requestGetUser(id))
-        return fetch('http://api.webapitester.com/users/' + id)
+        return fetch(BASE_URL + 'users/' + id)
             .then(checkStatus)
             .then(response => response.json())
             .then(json => dispatch(responseGetUser(json)))
@@ -160,7 +162,7 @@ function doGetUser(id) {
 function doCreateUser(first_name, last_name) {
     return (dispatch) => {
         dispatch(requestCreateUser())
-        return fetch('http://api.webapitester.com/users', {method:'post', body: JSON.stringify({first_name:first_name, last_name: last_name})})
+        return fetch(BASE_URL + 'users', {method:'post', body: JSON.stringify({first_name:first_name, last_name: last_name})})
             .then(checkStatus)
             .then(response => {
                 let id = response.headers.get('location').split('/').pop()
@@ -174,7 +176,7 @@ function doCreateUser(first_name, last_name) {
 function doUpdateUser(id, first_name, last_name) {
     return (dispatch) => {
         dispatch(requestUpdateUser())
-        return fetch('http://api.webapitester.com/users/' + id, {method:'put', body: JSON.stringify({first_name:first_name, last_name: last_name})})
+        return fetch(BASE_URL + 'users/' + id, {method:'put', body: JSON.stringify({first_name:first_name, last_name: last_name})})
             .then(checkStatus)
             .then(response => {
                 dispatch(responseUpdateUser(id))
@@ -187,7 +189,7 @@ function doUpdateUser(id, first_name, last_name) {
 function doDeleteUser(id) {
     return (dispatch) => {
         dispatch(requestDeleteUser(id))
-        return fetch('http://api.webapitester.com/users/' + id, {method:'delete'})
+        return fetch(BASE_URL + 'users/' + id, {method:'delete'})
             .then(checkStatus)
             .then(dispatch(responseDeleteUser(id)))
             .catch(e => dispatch(requestDeleteUserFail("Unable to delete user." + e)));
@@ -229,7 +231,7 @@ export function userManagementReducer(state = initialState, action) {
         case RESPONSE_DELETE_USER:
             return { 
                 ...state, 
-                users : state.users.filter(function(user) { return user.id != action.id } ) 
+                users : state.users.filter(function(user) { return user.id !== action.id } ) 
             }
 
         case REQUEST_UPDATE_USER:

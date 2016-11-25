@@ -2,6 +2,8 @@ import fetch from 'isomorphic-fetch'
 import Constants from 'constants'
 import { hashHistory } from 'react-router'
 
+export const BASE_URL = 'http://api-dev.webapitester.com/'
+
 // LIST
 export const REQUEST_LIST_DEVICES = 'REQUEST_LIST_DEVICES'
 export const REQUEST_LIST_DEVICES_FAIL = 'REQUEST_LIST_DEVICES_FAIL'
@@ -37,7 +39,7 @@ export function listDevices() {
 function doListDevices() {
     return (dispatch) => {
         dispatch(requestListDevices())
-        return fetch('http://api.webapitester.com/devices')
+        return fetch(BASE_URL + 'devices')
             .then(checkStatus)
             .then(response => response.json())
             .then(json => dispatch(responseListDevices(json)))
