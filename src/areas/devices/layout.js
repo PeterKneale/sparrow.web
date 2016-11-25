@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
 
 const DevicesLayout = props => {
     return (
@@ -6,10 +6,6 @@ const DevicesLayout = props => {
             {props.children}
         </div>
     );
-};
-
-DevicesLayout.propTypes = {
-    
 };
 
 export default DevicesLayout;

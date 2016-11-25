@@ -1,5 +1,4 @@
 import fetch from 'isomorphic-fetch'
-import Constants from 'constants'
 import { hashHistory } from 'react-router'
 
 export const BASE_URL = 'http://api-dev.webapitester.com/'

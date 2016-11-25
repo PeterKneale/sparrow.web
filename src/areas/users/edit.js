@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
 import Header from '../../components'
 
 const UsersEdit = props => {
@@ -7,10 +7,6 @@ const UsersEdit = props => {
             <Header heading="Edit User"/>
         </div>
     );
-};
-
-UsersEdit.propTypes = {
-    
 };
 
 export default UsersEdit;

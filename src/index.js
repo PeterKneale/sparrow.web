@@ -8,7 +8,6 @@ import { Router, Route, hashHistory, IndexRoute } from 'react-router'
 
 import Home from './areas/home'
 
-
 // Devices
 import { listDevices } from "./areas/devices/actions"
 import DevicesLayout from './areas/devices/layout'

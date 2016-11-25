@@ -3,10 +3,10 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { Button, Glyphicon } from 'react-bootstrap';
 import { navigate, listUsers, deleteUser } from "./actions"
-import { Spinner, Notice } from '../../components';
+import { Spinner, Notification } from '../../components';
 
 const none = () => (
-    <Notice header="No users found" body="There are no users present in your account" style="info"/>
+    <Notification header="No users found" body="There are no users present in your account" level="info"/>
 )
 
 const renderUser = (user, onEdit, onDelete) => (
@@ -42,7 +42,6 @@ const renderUsers = (users, onEdit, onDelete, onRefresh) => (
     </div>
 )
 
-
 const UsersList = ({loading, users, onEdit, onDelete, onRefresh}) => {
     if (loading)
         return <Spinner/>
@@ -77,7 +76,7 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(UsersList)
+)(UsersList);
 
 
 

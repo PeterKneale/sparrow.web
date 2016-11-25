@@ -1,5 +1,5 @@
 export {default as Header} from './Header'
 export {default as Jumbo} from './Jumbo'
 export {default as Menu} from './Menu'
-export {default as Notice} from './Notice'    
+export {default as Notification} from './Notification'    
 export {default as Spinner} from './Spinner'    
